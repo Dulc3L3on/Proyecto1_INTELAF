@@ -3,14 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.mycompany.proyecto1_intelaf;
-    
-import FrontendTrabajadores.Consultas;
-import FrontendTrabajadores.Home;
-import FrontendTrabajadores.ModoCajero;
-import FrontendTrabajadores.ModoGerente;
-import FrontendTrabajadores.Reportes;
+package com.mycompany.proyecto1_intelaf;    
 
+import FrontendTrabajadores.Home;
 
 /**
  *

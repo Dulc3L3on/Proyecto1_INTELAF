@@ -5,19 +5,51 @@
  */
 package FrontendTrabajadores;
 
+import ManejoDeInformacion.ListaEnlazada;
+import ManejoDeInformacion.ManejadorArchivo;
+import ManejoDeInformacion.ManejadorDB;
+import java.awt.event.KeyEvent;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+import javax.swing.filechooser.FileNameExtensionFilter;
+
 /**
  *
  * @author phily
  */
 public class Home extends javax.swing.JFrame {
-    
-    
+    ManejadorDB manejadorDB = new ManejadorDB();
+    ManejadorArchivo manejadorArchivo = new ManejadorArchivo();    
+    avisoDBvacia avisoDB = new avisoDBvacia(new javax.swing.JFrame(), true);
+    listadoLineasErradas listado = new listadoLineasErradas(new javax.swing.JFrame(), true);
+    Boolean isEmpty;
+    int camposLlenos=0;
+    char[] contrasenia;
 
     /**
      * Creates new form Home
      */
     public Home() {
         initComponents();
+        manejadorDB.conectarConDB();
+        
+        if((isEmpty=manejadorDB.estaVacia())){
+            avisoDB.setLocationRelativeTo(null);
+            avisoDB.setVisible(true);
+            
+            if(avisoDB.devolverDecision()){
+                 abastecer();
+                
+            }
+            
+            if(manejadorDB.estaVacia()){
+              //eso quiere decir que no se cargo bien el archivo o algo por el estilo de
+              //tal manera que no pudo completarse el proceso de abastecimiento
+               manipularCampos(false);
+               mnItem_abastecerAuxiliar.setEnabled(true);              
+            }
+        }//sino pues no se muestra y como el botón auxiliar ya está deshabilitado...
+        
     }
 
     /**
@@ -44,8 +76,12 @@ public class Home extends javax.swing.JFrame {
         txtF_nombreUsuario = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
         btn_entrar = new javax.swing.JButton();
-        jPasswordField1 = new javax.swing.JPasswordField();
+        passF_contraseniaTrabajador = new javax.swing.JPasswordField();
         lbl_Fondo = new javax.swing.JLabel();
+        jMenuBar1 = new javax.swing.JMenuBar();
+        jMenu1 = new javax.swing.JMenu();
+        mnItem_abastecerAuxiliar = new javax.swing.JMenuItem();
+        jMenu2 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMaximumSize(new java.awt.Dimension(1000, 747));
@@ -61,7 +97,7 @@ public class Home extends javax.swing.JFrame {
         jLabel1.setText("<< WORKspace >>");
         jLabel1.setOpaque(true);
         getContentPane().add(jLabel1);
-        jLabel1.setBounds(0, 50, 1000, 60);
+        jLabel1.setBounds(0, 30, 1000, 60);
 
         cbBx_sucursales.setFont(new java.awt.Font("Samanata", 0, 15)); // NOI18N
         cbBx_sucursales.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
@@ -71,22 +107,22 @@ public class Home extends javax.swing.JFrame {
             }
         });
         getContentPane().add(cbBx_sucursales);
-        cbBx_sucursales.setBounds(110, 210, 320, 30);
+        cbBx_sucursales.setBounds(110, 190, 320, 30);
 
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Logos_Clientes_GT_Intelaf.png"))); // NOI18N
         getContentPane().add(jLabel2);
-        jLabel2.setBounds(20, 600, 340, 100);
+        jLabel2.setBounds(20, 580, 340, 100);
 
         jLabel3.setFont(new java.awt.Font("Sawasdee", 1, 20)); // NOI18N
         jLabel3.setText("TIENDA");
         getContentPane().add(jLabel3);
-        jLabel3.setBounds(110, 170, 150, 35);
+        jLabel3.setBounds(110, 130, 150, 35);
 
         jLabel4.setFont(new java.awt.Font("Sawasdee", 1, 20)); // NOI18N
         jLabel4.setText("CARGO");
         getContentPane().add(jLabel4);
-        jLabel4.setBounds(110, 280, 100, 35);
+        jLabel4.setBounds(110, 260, 100, 35);
 
         buttonGroup1.add(rbtn_modoGerente);
         rbtn_modoGerente.setFont(new java.awt.Font("Ubuntu", 0, 18)); // NOI18N
@@ -94,14 +130,14 @@ public class Home extends javax.swing.JFrame {
         rbtn_modoGerente.setText("Gerente");
         rbtn_modoGerente.setContentAreaFilled(false);
         getContentPane().add(rbtn_modoGerente);
-        rbtn_modoGerente.setBounds(140, 350, 230, 25);
+        rbtn_modoGerente.setBounds(140, 320, 230, 25);
 
         buttonGroup1.add(rbtn_modoCajero);
         rbtn_modoCajero.setFont(new java.awt.Font("Ubuntu", 0, 18)); // NOI18N
         rbtn_modoCajero.setText("Cajero");
         rbtn_modoCajero.setContentAreaFilled(false);
         getContentPane().add(rbtn_modoCajero);
-        rbtn_modoCajero.setBounds(140, 400, 78, 25);
+        rbtn_modoCajero.setBounds(140, 380, 78, 25);
 
         buttonGroup1.add(rbtn_modoBodeguero);
         rbtn_modoBodeguero.setFont(new java.awt.Font("Ubuntu", 0, 18)); // NOI18N
@@ -133,6 +169,7 @@ public class Home extends javax.swing.JFrame {
 
         btn_entrar.setFont(new java.awt.Font("Sawasdee", 1, 25)); // NOI18N
         btn_entrar.setText("ENTRAR");
+        btn_entrar.setEnabled(false);
         btn_entrar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_entrarActionPerformed(evt);
@@ -140,15 +177,49 @@ public class Home extends javax.swing.JFrame {
         });
         jPanel1.add(btn_entrar);
         btn_entrar.setBounds(130, 470, 140, 50);
-        jPanel1.add(jPasswordField1);
-        jPasswordField1.setBounds(150, 400, 210, 28);
+
+        passF_contraseniaTrabajador.setEnabled(false);
+        passF_contraseniaTrabajador.setSelectionColor(new java.awt.Color(213, 165, 139));
+        passF_contraseniaTrabajador.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                passF_contraseniaTrabajadorMouseClicked(evt);
+            }
+        });
+        passF_contraseniaTrabajador.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                passF_contraseniaTrabajadorKeyReleased(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                passF_contraseniaTrabajadorKeyTyped(evt);
+            }
+        });
+        jPanel1.add(passF_contraseniaTrabajador);
+        passF_contraseniaTrabajador.setBounds(150, 400, 210, 28);
 
         getContentPane().add(jPanel1);
-        jPanel1.setBounds(570, 140, 380, 540);
+        jPanel1.setBounds(570, 130, 380, 540);
 
         lbl_Fondo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/fondoPrinciapal.jpg"))); // NOI18N
         getContentPane().add(lbl_Fondo);
         lbl_Fondo.setBounds(0, 0, 1000, 720);
+
+        jMenu1.setText("File");
+
+        mnItem_abastecerAuxiliar.setText("abastecer base de datos");
+        mnItem_abastecerAuxiliar.setEnabled(false);
+        mnItem_abastecerAuxiliar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnItem_abastecerAuxiliarActionPerformed(evt);
+            }
+        });
+        jMenu1.add(mnItem_abastecerAuxiliar);
+
+        jMenuBar1.add(jMenu1);
+
+        jMenu2.setText("Edit");
+        jMenuBar1.add(jMenu2);
+
+        setJMenuBar(jMenuBar1);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -158,27 +229,120 @@ public class Home extends javax.swing.JFrame {
     }//GEN-LAST:event_cbBx_sucursalesActionPerformed
 
     private void btn_entrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_entrarActionPerformed
-        if(rbtn_modoCajero.isSelected()){
-             ModoCajero cajero = new ModoCajero();
+        //se revisa si la contraseña[no estando vacía] obtenida de la DB concuerda con la escrita aqupi no se ignoran mayus ó minus
+        contrasenia=passF_contraseniaTrabajador.getPassword();
         
-            this.dispose();
+        if(contrasenia!=null){
+            if(rbtn_modoCajero.isSelected()){
+                 ModoCajero cajero = new ModoCajero();
         
-            cajero.setLocationRelativeTo(null);
-            cajero.setVisible(true);
-        }
+                this.dispose();
         
-        if(rbtn_modoGerente.isSelected()){
-            ModoGerente gerente = new ModoGerente();
+                cajero.setLocationRelativeTo(null);
+                cajero.setVisible(true);
+            }
+        
+            if(rbtn_modoGerente.isSelected()){
+                ModoGerente gerente = new ModoGerente();
+                
+                this.dispose();
             
-            this.dispose();
-            
-            gerente.setLocationRelativeTo(null);
-            gerente.setVisible(true);
-        }                     
-
-        
+                gerente.setLocationRelativeTo(null);
+                gerente.setVisible(true);
+            }                     
+        }else{
+            JOptionPane.showMessageDialog(null, "Debes igresar una contraseña","" , JOptionPane.WARNING_MESSAGE);
+        }                                
     }//GEN-LAST:event_btn_entrarActionPerformed
 
+    private void passF_contraseniaTrabajadorMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_passF_contraseniaTrabajadorMouseClicked
+        if(txtF_nombreUsuario.getText()!=null){
+            //Se procederá a revisar si ese usuario se encuentra en la DB si no es así no se habilitará
+            //y se mandará a decir que ese usuario no existe
+               
+            
+            //si existe se obtendrá la contraseña de dicho usuario para no estar consultando cada vez a la DB
+            //y con ella se comparará lo que en el password se encuentre, donde dicha comp se hará al presionar el btn
+            passF_contraseniaTrabajador.setEnabled(true);
+        }
+    }//GEN-LAST:event_passF_contraseniaTrabajadorMouseClicked
+
+    private void passF_contraseniaTrabajadorKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_passF_contraseniaTrabajadorKeyTyped
+        if((passF_contraseniaTrabajador.getPassword())!=null){
+            if(evt.getKeyCode()!=KeyEvent.VK_BACK_SPACE){
+              btn_entrar.setEnabled(true);
+            }   
+            
+        }
+    }//GEN-LAST:event_passF_contraseniaTrabajadorKeyTyped
+
+    private void passF_contraseniaTrabajadorKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_passF_contraseniaTrabajadorKeyReleased
+        if(evt.getKeyCode()==KeyEvent.VK_BACK_SPACE){
+            System.out.println(KeyEvent.VK_BACK_SPACE);
+             if((passF_contraseniaTrabajador.getPassword())==null){
+                btn_entrar.setEnabled(false);
+                btn_entrar.updateUI();
+            }
+        }//no funciona porque el evento no tiene poder sobre otros componentes que no sean al que app
+    }//GEN-LAST:event_passF_contraseniaTrabajadorKeyReleased
+
+    private void mnItem_abastecerAuxiliarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnItem_abastecerAuxiliarActionPerformed
+        abastecer();
+        
+        manipularCampos(true);  
+    }//GEN-LAST:event_mnItem_abastecerAuxiliarActionPerformed
+
+    /**
+     * Método en el que convergen los otros procesos necesarios para
+     * abastecer a la DB [mostrarJFch, leerArchAbast, cada método para 
+     * insertar en la DB]
+     * 
+     */
+    public void abastecer(){        
+         
+         String path=mostrarFileChooserLectura();
+         
+         if(path!=null){             
+             ListaEnlazada<String> lineasDelArchivo =  manejadorArchivo.leerArchivoAbastecimiento(path);//se lee el archivo completamente
+             ListaEnlazada<Integer> listaIndicesErroneos = manejadorDB.inicializarDB(lineasDelArchivo);//se intenta abastecer, si no se ha logrado en algunas partes, se devuelven esos lugares (indices del nodo)
+             if(!listaIndicesErroneos.estaVacia()){
+                ListaEnlazada<String> lineasErradas=lineasDelArchivo.obtnerContenidoListado(listaIndicesErroneos);
+                //se manda a llamar al diálogo que recibirá la lista antes de ser mostrado para que pueda visualizar el listado completo                
+                listado.recibirDatos(lineasErradas, listaIndicesErroneos);
+             }             
+             
+         }else{
+             JOptionPane.showMessageDialog(null, "Ningún archivo seleccionado", "", JOptionPane.WARNING_MESSAGE);
+         }
+     }
+     
+    
+     public String mostrarFileChooserLectura(){    
+        JFileChooser ventanaLectura = new JFileChooser();
+        String direccion;
+        
+        FileNameExtensionFilter filtro = new FileNameExtensionFilter("Solo archivos .txt","txt");//esto para evitar que pueda seleccionar cualquier otra extesión que no sea la requerida
+        ventanaLectura.setFileFilter(filtro);
+        
+        if(ventanaLectura.showOpenDialog(ventanaLectura)==(JFileChooser.APPROVE_OPTION)){//aquí sería bueno colocar que tenga el nombre " " y si lo tiene se tomar al arch, esto para evitar que el método trabaje en vano ya que si se le manda un arch que no tiene la sintaxis correcta al final terminaría devolviendo al listado de las líneas que en él se encuentran y con ello se habría trabajado super en vano
+            
+            direccion=ventanaLectura.getSelectedFile().getAbsolutePath();
+            return direccion;
+        }        
+
+        
+        return null;//es decir que no seleccionó ningún solo archivo y por lo tanto no hay que hacer nada  
+    
+    }          
+    
+    public void manipularCampos(boolean estado){
+        cbBx_sucursales.setEnabled(estado);        
+        txtF_nombreUsuario.setEnabled(estado);//es el código del empleado
+        rbtn_modoBodeguero.setEnabled(estado);
+        rbtn_modoCajero.setEnabled(estado);
+        rbtn_modoGerente.setEnabled(estado);
+    }
+   
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btn_entrar;
@@ -191,9 +355,13 @@ public class Home extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenu jMenu2;
+    private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPasswordField jPasswordField1;
     private javax.swing.JLabel lbl_Fondo;
+    private javax.swing.JMenuItem mnItem_abastecerAuxiliar;
+    private javax.swing.JPasswordField passF_contraseniaTrabajador;
     private javax.swing.JRadioButton rbtn_modoBodeguero;
     private javax.swing.JRadioButton rbtn_modoCajero;
     private javax.swing.JRadioButton rbtn_modoGerente;

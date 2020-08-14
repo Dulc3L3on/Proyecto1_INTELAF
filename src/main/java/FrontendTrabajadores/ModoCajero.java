@@ -5,17 +5,30 @@
  */
 package FrontendTrabajadores;
 
+import BackendTrabajadores.Cajero;
+import BackendTrabajadores.Usuario;
+import ManejoDeInformacion.ManejadorDB;
+import javax.swing.JTable;
+
 /**
  *
  * @author phily
  */
 public class ModoCajero extends javax.swing.JFrame {
-
+    public static ResultSetTableModel modeloConsulta = new ResultSetTableModel();
+    Cajero cajero = new Cajero();//Ahí te recuerdas que si no manda nada, es por el hecho de estar trabajando con el arreglo del padre y tener instanciado al hijo... pero yo recuerdo que debería funcionar correctamente xD
+    ManejadorDB manejadorDB = new ManejadorDB();
+    Listeners listener = new Listeners();                
+    
     /**
      * Creates new form ModoCajero
      */
     public ModoCajero() {
         initComponents();
+        //AUNQUE PENSÁNDOLO BIEN, NO DEBERÍA SER STATIC PORQUE EL BTN PARA VENDER PEDIDO [de consultas] mandará lo seleccionado [accediendo nuevamente a la DB o copiando la fila select...] al txtF donde ya solo resta clickear el btn para añadir el [los] subpedidos a ventas para que dejen de ser pedidos y pasen a mannos de su dueño xD
+       
+        tbl_tablaConsultas = new JTable(modeloConsulta);//esto solo será útil para el btn de vender pedido, de la ventana de consultas cuando el cliente ha olvidado su número                
+        
     }
 
     /**
@@ -31,27 +44,31 @@ public class ModoCajero extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
-        jLabel1 = new javax.swing.JLabel();
-        jTextField2 = new javax.swing.JTextField();
+        lbl_codigoTiendaActual = new javax.swing.JLabel();
+        txtF_codigo = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jLabel7 = new javax.swing.JLabel();
+        scrllP_consultas = new javax.swing.JScrollPane();
+        tbl_tablaConsultas = new javax.swing.JTable();
+        lblBtn_agregarProducto = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         lbl_home = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        jScrollPane3 = new javax.swing.JScrollPane();
+        scrllP_ventas = new javax.swing.JScrollPane();
+        scrllP_pedidos = new javax.swing.JScrollPane();
         jLabel11 = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
         txt_productoSeleccionado = new javax.swing.JTextField();
         spn_Cantidad = new javax.swing.JSpinner();
         rbt_productos = new javax.swing.JRadioButton();
         rbtn_pedidos = new javax.swing.JRadioButton();
+        jLabel2 = new javax.swing.JLabel();
+        cbBx_codigosTiendasDestino = new javax.swing.JComboBox<>();
         lbl_FondoIzq = new javax.swing.JLabel();
         lbl_FondoDer = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
+        Jmn_verReportes = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -71,21 +88,61 @@ public class ModoCajero extends javax.swing.JFrame {
         jLabel4.setBounds(370, 30, 210, 20);
         getContentPane().add(jLabel5);
         jLabel5.setBounds(50, 60, 0, 0);
-        getContentPane().add(jLabel1);
-        jLabel1.setBounds(110, 50, 60, 30);
-        getContentPane().add(jTextField2);
-        jTextField2.setBounds(150, 130, 190, 28);
+
+        lbl_codigoTiendaActual.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        getContentPane().add(lbl_codigoTiendaActual);
+        lbl_codigoTiendaActual.setBounds(80, 50, 120, 30);
+
+        txtF_codigo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtF_codigoActionPerformed(evt);
+            }
+        });
+        txtF_codigo.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtF_codigoKeyPressed(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtF_codigoKeyTyped(evt);
+            }
+        });
+        getContentPane().add(txtF_codigo);
+        txtF_codigo.setBounds(150, 130, 190, 28);
 
         jLabel6.setBackground(new java.awt.Color(226, 187, 131));
         jLabel6.setOpaque(true);
         getContentPane().add(jLabel6);
         jLabel6.setBounds(390, 70, 170, 20);
-        getContentPane().add(jScrollPane1);
-        jScrollPane1.setBounds(30, 190, 560, 370);
 
-        jLabel7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/1294762.png"))); // NOI18N
-        getContentPane().add(jLabel7);
-        jLabel7.setBounds(240, 640, 120, 110);
+        tbl_tablaConsultas.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        tbl_tablaConsultas.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tbl_tablaConsultasMouseClicked(evt);
+            }
+        });
+        scrllP_consultas.setViewportView(tbl_tablaConsultas);
+
+        getContentPane().add(scrllP_consultas);
+        scrllP_consultas.setBounds(30, 190, 560, 370);
+
+        lblBtn_agregarProducto.setIcon(new javax.swing.ImageIcon(getClass().getResource("/1294762.png"))); // NOI18N
+        lblBtn_agregarProducto.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lblBtn_agregarProductoMouseClicked(evt);
+            }
+        });
+        getContentPane().add(lblBtn_agregarProducto);
+        lblBtn_agregarProducto.setBounds(260, 620, 120, 110);
 
         jLabel8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/sobre.png"))); // NOI18N
         jLabel8.setText("jLabel8");
@@ -110,10 +167,10 @@ public class ModoCajero extends javax.swing.JFrame {
         jButton1.setText("ACEPTAR");
         getContentPane().add(jButton1);
         jButton1.setBounds(1070, 940, 130, 40);
-        getContentPane().add(jScrollPane2);
-        jScrollPane2.setBounds(660, 70, 550, 370);
-        getContentPane().add(jScrollPane3);
-        jScrollPane3.setBounds(660, 520, 550, 390);
+        getContentPane().add(scrllP_ventas);
+        scrllP_ventas.setBounds(660, 70, 550, 370);
+        getContentPane().add(scrllP_pedidos);
+        scrllP_pedidos.setBounds(660, 520, 550, 390);
 
         jLabel11.setFont(new java.awt.Font("Sawasdee", 1, 25)); // NOI18N
         jLabel11.setText("<<VENTAS>>");
@@ -133,6 +190,7 @@ public class ModoCajero extends javax.swing.JFrame {
 
         groupBtn_tipoBusqueda.add(rbt_productos);
         rbt_productos.setFont(new java.awt.Font("Sawasdee", 0, 19)); // NOI18N
+        rbt_productos.setSelected(true);
         rbt_productos.setText("Productos");
         getContentPane().add(rbt_productos);
         rbt_productos.setBounds(40, 950, 130, 35);
@@ -142,6 +200,16 @@ public class ModoCajero extends javax.swing.JFrame {
         rbtn_pedidos.setText("Pedidos Listos");
         getContentPane().add(rbtn_pedidos);
         rbtn_pedidos.setBounds(180, 950, 160, 35);
+
+        jLabel2.setFont(new java.awt.Font("Sawasdee", 1, 17)); // NOI18N
+        jLabel2.setText("Tienda destino:");
+        getContentPane().add(jLabel2);
+        jLabel2.setBounds(70, 630, 120, 30);
+
+        cbBx_codigosTiendasDestino.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cbBx_codigosTiendasDestino.setEnabled(false);
+        getContentPane().add(cbBx_codigosTiendasDestino);
+        cbBx_codigosTiendasDestino.setBounds(30, 670, 190, 28);
 
         lbl_FondoIzq.setBackground(new java.awt.Color(196, 64, 45));
         lbl_FondoIzq.setIcon(new javax.swing.ImageIcon(getClass().getResource("/fondo-mosaico-abstracto-fondo-geometrico-triangulo-elementos-diseno-ejemplo-vector-amarillo-naranja-rojo_1151-360.jpg"))); // NOI18N
@@ -156,6 +224,15 @@ public class ModoCajero extends javax.swing.JFrame {
         lbl_FondoDer.setBounds(620, 0, 630, 1020);
 
         jMenu1.setText("File");
+
+        Jmn_verReportes.setText("Ver reportes");
+        Jmn_verReportes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                Jmn_verReportesActionPerformed(evt);
+            }
+        });
+        jMenu1.add(Jmn_verReportes);
+
         jMenuBar1.add(jMenu1);
 
         jMenu2.setText("Edit");
@@ -174,33 +251,114 @@ public class ModoCajero extends javax.swing.JFrame {
         home.setVisible(true);
     }//GEN-LAST:event_lbl_homeMouseClicked
 
+    private void txtF_codigoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtF_codigoActionPerformed
+        
+    }//GEN-LAST:event_txtF_codigoActionPerformed
+
+    private void txtF_codigoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtF_codigoKeyPressed
+                   
+        if(evt.getKeyCode()== java.awt.event.KeyEvent.VK_ENTER){//por exe cuando presionen ENTER se provocará que puedan mostrarse coin ya que no se habrá especificado bien el código y con ello simular a lo que google hace para dar coincidencias en la búsqueda ingresada xD
+            //se manda a llamar al método para realizar la consulta, esto según el rbtn que esté seleccionado
+            //pues si es productos será el método buscarProductos, sino entonces será buscarPedido           
+            
+            for(int tiendaDeBusqueda = 1; tiendaDeBusqueda <= 2; tiendaDeBusqueda++){//es decir esta ó las otras xD... de alguna manera tengo que enterarme si se encontró en la tienda actual, para permitir que se pase al siguiente ídice del for y con ello revisar a las otras tiendas xD
+                modeloConsulta.mostrarConsulta(cajero.buscar(determinarTipoBusqueda(), txtF_codigo.getText(), tiendaDeBusqueda, lbl_codigoTiendaActual.getText()));//el código de la tienda tb lo pude haber obtenido del cbCOdigosTIendaDestino, no habría problema cuando seleccionara a otra tienda porque este proceso ya habría pasado entonces...
+                //recuerda que todo lo que quieras saber a cerca de la info de la tabla, lo puedes obtner del modelo, por el hecho de ser quien posee a toda la info
+                
+                if(tbl_tablaConsultas.getRowCount()==0){//esto indicaría que no se encontró nada en la tienda actual
+                    cbBx_codigosTiendasDestino.setEnabled(true);//puesto que aquí decidirá el cliente a que tienda prefiere ir a trar según el tiempo de envío, pues talvez le convenga más ir a otra xD :)
+                    //se deshabilitará nuevamente, cuando se agregue el producto al pedido [y si quieres puedes dejarlo en su posición 1, auqnue no es obligatorio porque no afecta a nadie que no se haga edo xD]
+                }else{
+                    tiendaDeBusqueda=3;//para parar xD
+                }
+            }
+            
+        }
+        
+    }//GEN-LAST:event_txtF_codigoKeyPressed
+
+    private void Jmn_verReportesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Jmn_verReportesActionPerformed
+        Reportes reportes = new Reportes();
+        
+        reportes.setLocationRelativeTo(null);
+        reportes.setVisible(true);
+    }//GEN-LAST:event_Jmn_verReportesActionPerformed
+
+    private void txtF_codigoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtF_codigoKeyTyped
+        //se app los filtros, según el tipo de busqueda a realizar [producto o de pedido listo]
+        
+        char caracter = evt.getKeyChar();
+        
+        if(determinarTipoBusqueda()==2){//puesto que si es producto puede ingresar caracters alfanuméricos xD
+            if(caracter>9 || caracter<0) evt.consume();//Quiere decir que si no es un digito entonces se dejará lo anterior que si está correcto [ya sea el espacio en blanco o el caracter ant] xD
+        }
+    }//GEN-LAST:event_txtF_codigoKeyTyped
+
+    private void tbl_tablaConsultasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbl_tablaConsultasMouseClicked
+        String[] informacion=listener.paraMouseClicked(lbl_codigoTiendaActual.getText(), (String)modeloConsulta.getValueAt(1,1),tbl_tablaConsultas.getSelectedRow(), tbl_tablaConsultas.getSelectedColumn());//se obtiene la descripción del producto desde la DB
+        establecerDescripcion(informacion[1]);//al obtener el código del producto mando 1,1 porque sin importar cual se haya seleccionado se tendrá el mismo cód y además como el mín de filas es 1, y estas tablas comienzan a contar desde 1 entonces cabal... de todos modos revisa desde que valor comienza a contar las filas y cols
+        establecerLimiteVentas(Integer.parseInt(informacion[0]));        
+    }//GEN-LAST:event_tbl_tablaConsultasMouseClicked
+
+    private void lblBtn_agregarProductoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblBtn_agregarProductoMouseClicked
+        String tiendaBusqueda=lbl_codigoTiendaActual.getText();
+        
+        if(cajero.lugarBusqueda==2){//Es decir que se encuentra en otra tienda
+            tiendaBusqueda=(String)ModoCajero.modeloConsulta.getValueAt(tbl_tablaConsultas.getSelectedRow(), tbl_tablaConsultas.getSelectedColumn());
+        }
+        
+        cajero.buscarCantidad(tiendaBusqueda, tiendaBusqueda);
+        
+        
+    }//GEN-LAST:event_lblBtn_agregarProductoMouseClicked
+
+    
+    public void establecerDescripcion(String descripcion){
+        txt_productoSeleccionado.setText(descripcion);
+    }
+    
+    public void establecerLimiteVentas(int maximo){//será útil para este [aunque no es necesario] y para la ventana de reportes, por el hecho de que al seleccionar, se exe el listener en el cual se tendrá el método "paraMouseCLicked" el cual devolverá la cadena con descripción, que para ese caso será útil para llenar a este txtf y limitar al spinner
+        spn_Cantidad.setModel(new javax.swing.SpinnerNumberModel(1, 1,maximo, 1));
+    }
+    
+    public int determinarTipoBusqueda(){
+        if(rbt_productos.isSelected()){
+            return 1;
+        }
+        
+        return 2;//puesto que están englobados en un grupo de rBtn entonces o es 1 o es el otro xD
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenuItem Jmn_verReportes;
+    private javax.swing.JComboBox<String> cbBx_codigosTiendasDestino;
     private javax.swing.ButtonGroup groupBtn_tipoBusqueda;
     private javax.swing.JButton jButton1;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JTextField jTextField2;
+    private javax.swing.JLabel lblBtn_agregarProducto;
     private javax.swing.JLabel lbl_FondoDer;
     private javax.swing.JLabel lbl_FondoIzq;
+    private javax.swing.JLabel lbl_codigoTiendaActual;
     private javax.swing.JLabel lbl_home;
     private javax.swing.JRadioButton rbt_productos;
     private javax.swing.JRadioButton rbtn_pedidos;
+    private javax.swing.JScrollPane scrllP_consultas;
+    private javax.swing.JScrollPane scrllP_pedidos;
+    private javax.swing.JScrollPane scrllP_ventas;
     private javax.swing.JSpinner spn_Cantidad;
+    private javax.swing.JTable tbl_tablaConsultas;
+    private javax.swing.JTextField txtF_codigo;
     private javax.swing.JTextField txt_productoSeleccionado;
     // End of variables declaration//GEN-END:variables
 }

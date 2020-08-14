@@ -41,11 +41,14 @@ public class Reportes extends javax.swing.JFrame {
         spn_hastaAnio = new javax.swing.JSpinner();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
         lbl_fondo = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setMaximumSize(new java.awt.Dimension(858, 873));
-        setMinimumSize(new java.awt.Dimension(858, 873));
+        setMaximumSize(new java.awt.Dimension(858, 933));
+        setMinimumSize(new java.awt.Dimension(858, 933));
         setResizable(false);
         getContentPane().setLayout(null);
 
@@ -54,12 +57,13 @@ public class Reportes extends javax.swing.JFrame {
         getContentPane().add(cbBx_tipoReporte);
         cbBx_tipoReporte.setBounds(40, 90, 280, 35);
 
-        jLabel1.setFont(new java.awt.Font("Sarai", 1, 25)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Sarai", 1, 35)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(41, 10, 10));
         jLabel1.setText("-> TIPO DE REPORTE");
         getContentPane().add(jLabel1);
-        jLabel1.setBounds(40, 50, 230, 27);
+        jLabel1.setBounds(30, 20, 320, 60);
         getContentPane().add(scrollP_tablaEspecificaciones);
-        scrollP_tablaEspecificaciones.setBounds(320, 190, 400, 590);
+        scrollP_tablaEspecificaciones.setBounds(320, 190, 500, 590);
 
         Jlist_listadoGeneral.setFont(new java.awt.Font("Sawasdee", 0, 15)); // NOI18N
         Jlist_listadoGeneral.setModel(new javax.swing.AbstractListModel<String>() {
@@ -75,50 +79,67 @@ public class Reportes extends javax.swing.JFrame {
         btn_exportar.setFont(new java.awt.Font("Sawasdee", 1, 19)); // NOI18N
         btn_exportar.setText("EXPORTAR");
         getContentPane().add(btn_exportar);
-        btn_exportar.setBounds(580, 800, 140, 50);
+        btn_exportar.setBounds(330, 800, 140, 50);
 
         spn_desdeDia.setModel(new javax.swing.SpinnerNumberModel(1, 1, null, 1));
         getContentPane().add(spn_desdeDia);
-        spn_desdeDia.setBounds(520, 40, 60, 28);
+        spn_desdeDia.setBounds(560, 40, 60, 28);
 
         spn_desdeMes.setModel(new javax.swing.SpinnerNumberModel(1, 1, 12, 1));
         getContentPane().add(spn_desdeMes);
-        spn_desdeMes.setBounds(590, 40, 60, 28);
+        spn_desdeMes.setBounds(640, 40, 60, 28);
 
         spn_desdeAnio.setModel(new javax.swing.SpinnerNumberModel(2020, 2020, 2020, 1));
         getContentPane().add(spn_desdeAnio);
-        spn_desdeAnio.setBounds(660, 40, 80, 28);
+        spn_desdeAnio.setBounds(720, 40, 80, 28);
 
         spn_hastaDia.setModel(new javax.swing.SpinnerNumberModel(1, 1, null, 1));
         getContentPane().add(spn_hastaDia);
-        spn_hastaDia.setBounds(520, 120, 60, 28);
+        spn_hastaDia.setBounds(560, 120, 60, 28);
 
         spn_hastaMes.setModel(new javax.swing.SpinnerNumberModel(1, 1, 12, 1));
         getContentPane().add(spn_hastaMes);
-        spn_hastaMes.setBounds(590, 120, 60, 28);
+        spn_hastaMes.setBounds(640, 120, 60, 28);
 
         spn_hastaAnio.setModel(new javax.swing.SpinnerNumberModel(2020, 2020, 2020, 1));
         getContentPane().add(spn_hastaAnio);
-        spn_hastaAnio.setBounds(660, 120, 80, 28);
+        spn_hastaAnio.setBounds(720, 120, 80, 28);
 
         jLabel2.setFont(new java.awt.Font("Sarai", 1, 21)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(67, 53, 53));
         jLabel2.setText("DESDE:");
         getContentPane().add(jLabel2);
-        jLabel2.setBounds(520, 10, 70, 23);
+        jLabel2.setBounds(560, 10, 70, 23);
 
         jLabel3.setFont(new java.awt.Font("Sarai", 1, 21)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(119, 91, 91));
         jLabel3.setText("HASTA:");
         getContentPane().add(jLabel3);
-        jLabel3.setBounds(520, 90, 70, 23);
+        jLabel3.setBounds(560, 90, 70, 23);
+
+        jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/1294762.png"))); // NOI18N
+        jLabel4.setText("jLabel4");
+        getContentPane().add(jLabel4);
+        jLabel4.setBounds(700, 780, 120, 110);
+
+        jLabel6.setBackground(new java.awt.Color(118, 48, 37));
+        jLabel6.setOpaque(true);
+        getContentPane().add(jLabel6);
+        jLabel6.setBounds(619, 430, 250, 470);
+
+        jLabel5.setBackground(new java.awt.Color(201, 174, 146));
+        jLabel5.setOpaque(true);
+        getContentPane().add(jLabel5);
+        jLabel5.setBounds(819, 280, 50, 150);
 
         lbl_fondo.setBackground(new java.awt.Color(217, 198, 179));
-        lbl_fondo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/texturizado.jpeg"))); // NOI18N
+        lbl_fondo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/fondo-poligonal-oscuro-rojo_1034-568.jpg"))); // NOI18N
         lbl_fondo.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
         lbl_fondo.setMaximumSize(new java.awt.Dimension(1000, 768));
         lbl_fondo.setMinimumSize(new java.awt.Dimension(1000, 768));
         lbl_fondo.setOpaque(true);
         getContentPane().add(lbl_fondo);
-        lbl_fondo.setBounds(0, 0, 766, 873);
+        lbl_fondo.setBounds(0, 0, 870, 900);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -130,6 +151,9 @@ public class Reportes extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JLabel lbl_fondo;
     private javax.swing.JScrollPane scrollP_tablaEspecificaciones;

@@ -5,6 +5,10 @@
  */
 package FrontendTrabajadores;
 
+import ManejoDeInformacion.ManejadorDB;
+import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileNameExtensionFilter;
+
 /**
  *
  * @author phily
@@ -14,12 +18,15 @@ public class ModoGerente extends javax.swing.JFrame {
     NuevoUsuario ventanaTrabajador = new NuevoUsuario();
     nuevoProducto ventanaProductos = new nuevoProducto();
     Home home = new Home();
+    ManejadorDB manejadorDB = new ManejadorDB();
     
     /**
      * Creates new form ModoGerente
      */
     public ModoGerente() {
         initComponents();
+        
+        manejadorDB.conectarConDB();
     }
 
     /**
@@ -44,6 +51,11 @@ public class ModoGerente extends javax.swing.JFrame {
         btn_IR = new javax.swing.JButton();
         jLabel5 = new javax.swing.JLabel();
         lbl_Fondo = new javax.swing.JLabel();
+        jMenuBar1 = new javax.swing.JMenuBar();
+        jMenu1 = new javax.swing.JMenu();
+        jMenuItem1 = new javax.swing.JMenuItem();
+        mnIt_abastecerDB = new javax.swing.JMenuItem();
+        jMenu2 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMaximumSize(new java.awt.Dimension(626, 626));
@@ -53,12 +65,12 @@ public class ModoGerente extends javax.swing.JFrame {
 
         lbl_tiendaActual.setOpaque(true);
         getContentPane().add(lbl_tiendaActual);
-        lbl_tiendaActual.setBounds(50, 40, 200, 20);
+        lbl_tiendaActual.setBounds(50, 30, 200, 20);
 
         jLabel1.setFont(new java.awt.Font("Sawasdee", 1, 25)); // NOI18N
         jLabel1.setText("INFORMACIÓN NUEVA");
         getContentPane().add(jLabel1);
-        jLabel1.setBounds(60, 130, 300, 30);
+        jLabel1.setBounds(50, 110, 300, 30);
 
         rbtn_nuevaTienda.setFont(new java.awt.Font("Sawasdee", 0, 19)); // NOI18N
         rbtn_nuevaTienda.setText("Tienda");
@@ -68,7 +80,7 @@ public class ModoGerente extends javax.swing.JFrame {
             }
         });
         getContentPane().add(rbtn_nuevaTienda);
-        rbtn_nuevaTienda.setBounds(110, 190, 120, 30);
+        rbtn_nuevaTienda.setBounds(110, 170, 120, 30);
 
         rbtn_nuevosProductos.setFont(new java.awt.Font("Sawasdee", 0, 19)); // NOI18N
         rbtn_nuevosProductos.setText("Productos");
@@ -78,7 +90,7 @@ public class ModoGerente extends javax.swing.JFrame {
             }
         });
         getContentPane().add(rbtn_nuevosProductos);
-        rbtn_nuevosProductos.setBounds(110, 250, 130, 35);
+        rbtn_nuevosProductos.setBounds(110, 230, 130, 35);
 
         rbn_nuevosTrabajadores.setFont(new java.awt.Font("Sawasdee", 0, 19)); // NOI18N
         rbn_nuevosTrabajadores.setText("trabajadores");
@@ -88,26 +100,31 @@ public class ModoGerente extends javax.swing.JFrame {
             }
         });
         getContentPane().add(rbn_nuevosTrabajadores);
-        rbn_nuevosTrabajadores.setBounds(110, 310, 150, 30);
+        rbn_nuevosTrabajadores.setBounds(110, 290, 150, 30);
 
         chkBx_consultas.setFont(new java.awt.Font("Sawasdee", 1, 25)); // NOI18N
         chkBx_consultas.setText("CONSULTAS");
+        chkBx_consultas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                chkBx_consultasActionPerformed(evt);
+            }
+        });
         getContentPane().add(chkBx_consultas);
-        chkBx_consultas.setBounds(60, 390, 190, 40);
+        chkBx_consultas.setBounds(50, 360, 190, 40);
 
         jLabel2.setBackground(new java.awt.Color(209, 135, 61));
         jLabel2.setOpaque(true);
         getContentPane().add(jLabel2);
-        jLabel2.setBounds(419, 20, 180, 20);
+        jLabel2.setBounds(420, 30, 180, 20);
 
         jLabel3.setBackground(new java.awt.Color(229, 196, 163));
         jLabel3.setOpaque(true);
         getContentPane().add(jLabel3);
-        jLabel3.setBounds(420, 50, 150, 18);
+        jLabel3.setBounds(420, 70, 150, 18);
 
         jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Logos_Clientes_GT_Intelaf.png"))); // NOI18N
         getContentPane().add(jLabel4);
-        jLabel4.setBounds(350, 520, 270, 90);
+        jLabel4.setBounds(350, 500, 270, 90);
 
         btn_IR.setFont(new java.awt.Font("Sawasdee", 0, 25)); // NOI18N
         btn_IR.setText("IR");
@@ -117,7 +134,7 @@ public class ModoGerente extends javax.swing.JFrame {
             }
         });
         getContentPane().add(btn_IR);
-        btn_IR.setBounds(450, 450, 100, 40);
+        btn_IR.setBounds(450, 420, 100, 40);
 
         jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IconoHome.png"))); // NOI18N
         jLabel5.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -126,13 +143,33 @@ public class ModoGerente extends javax.swing.JFrame {
             }
         });
         getContentPane().add(jLabel5);
-        jLabel5.setBounds(20, 500, 100, 110);
+        jLabel5.setBounds(20, 470, 100, 110);
 
         lbl_Fondo.setBackground(new java.awt.Color(229, 133, 49));
         lbl_Fondo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/fondo-abstracto-poligonal-amarillo_1394-1160.jpg"))); // NOI18N
         lbl_Fondo.setOpaque(true);
         getContentPane().add(lbl_Fondo);
         lbl_Fondo.setBounds(0, 0, 650, 626);
+
+        jMenu1.setText("File");
+
+        jMenuItem1.setText("Ver reportes");
+        jMenu1.add(jMenuItem1);
+
+        mnIt_abastecerDB.setText("Abastecer Base de Datos");
+        mnIt_abastecerDB.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                mnIt_abastecerDBMouseClicked(evt);
+            }
+        });
+        jMenu1.add(mnIt_abastecerDB);
+
+        jMenuBar1.add(jMenu1);
+
+        jMenu2.setText("Edit");
+        jMenuBar1.add(jMenu2);
+
+        setJMenuBar(jMenuBar1);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -177,6 +214,28 @@ public class ModoGerente extends javax.swing.JFrame {
         home.setVisible(true);
     }//GEN-LAST:event_jLabel5MouseClicked
 
+    private void mnIt_abastecerDBMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_mnIt_abastecerDBMouseClicked
+/*        if(mysql_num_rows==0){
+        
+        }*/
+
+//debes buscar commo saber si está vaía o no... esto debería ser si las tablas no tienen ningún solo registro... 
+        
+        
+        
+        
+        /*if(path!=null){
+            ListaEnlazada<Integer> listaDeErrores = al manejador de archivos para leer lo que está en la dirección...
+        }*/
+        
+    }//GEN-LAST:event_mnIt_abastecerDBMouseClicked
+
+    private void chkBx_consultasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkBx_consultasActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_chkBx_consultasActionPerformed
+
+   
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btn_IR;
     private javax.swing.ButtonGroup buttonGroup1;
@@ -186,8 +245,13 @@ public class ModoGerente extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenu jMenu2;
+    private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JLabel lbl_Fondo;
     private javax.swing.JLabel lbl_tiendaActual;
+    private javax.swing.JMenuItem mnIt_abastecerDB;
     private javax.swing.JRadioButton rbn_nuevosTrabajadores;
     private javax.swing.JRadioButton rbtn_nuevaTienda;
     private javax.swing.JRadioButton rbtn_nuevosProductos;

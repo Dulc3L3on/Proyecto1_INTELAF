@@ -150,7 +150,7 @@ public class Consultas extends javax.swing.JFrame {
         getContentPane().add(jLabel6);
         jLabel6.setBounds(0, 810, 830, 10);
 
-        lbl_fondo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ff82e720aeb98a8e3b84ea44133c5197.jpg"))); // NOI18N
+        lbl_fondo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/fondoConsultas.jpg"))); // NOI18N
         getContentPane().add(lbl_fondo);
         lbl_fondo.setBounds(0, 0, 830, 878);
 
