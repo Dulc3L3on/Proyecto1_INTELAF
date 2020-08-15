@@ -38,6 +38,9 @@ public class listadoLineasErradas extends javax.swing.JDialog {
         lbl_Fondo = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setMaximumSize(new java.awt.Dimension(551, 490));
+        setMinimumSize(new java.awt.Dimension(551, 490));
+        setResizable(false);
         getContentPane().setLayout(null);
 
         jLabel2.setBackground(new java.awt.Color(149, 137, 125));

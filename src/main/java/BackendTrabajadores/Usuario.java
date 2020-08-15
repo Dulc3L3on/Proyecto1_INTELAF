@@ -5,6 +5,7 @@
  */
 package BackendTrabajadores;
 
+import ManejoDeInformacion.ListaEnlazada;
 import ManejoDeInformacion.ManejadorDB;
 
 /**
@@ -15,8 +16,17 @@ public class Usuario {//en este padre lo que se hará será construir todos aque
     public ManejadorDB manejadorDB = new ManejadorDB();
     //este arreglo me simplifica el proceso al momento de add el producto, pues después de hacer la revisión con respecto a la cantidad si pasa la prueba ya solamente es de pasar este arreglo [ya que tiene la info tal y como debe recibirla el método para construir la consulta] y asó hacer la agregación a la tabla correspondiente [venta/epdido] luego de haber hecho el descuento correspondiente
     public String paraObtencion[] = new String[6];//se emplearán arreglos por el hecho de que los tipos de consulta pueden variar y por lo mismo tendría que agrandarse el bloque para que se pueda especificar en que ídice del ciclo se debe add y en cuales solo crear el nodo[esto por el hecho de que revisará el método general cuales están nulos y cuelesno para formar la declaración final    
+    public String palabrasParaObtenerValor[][]= new String[3][4];
+    
     public int lugarBusqueda;//debe guardarse ya que por medio de este valor en el listener se sabrá de donde obtnerl el código de la tienda
         
+    public Usuario(){//Estas son las palabras pertenecientes a los metadatos de la tabla de donde se extraerá el dato
+        palabrasParaObtenerValor[0][0]="unidades";
+        palabrasParaObtenerValor[0][1]="Tienda_Producto";
+        palabrasParaObtenerValor[0][2]="IDtienda";
+        palabrasParaObtenerValor[0][3]="IDproducto";
+    }
+    
     
     
     /**
@@ -74,21 +84,35 @@ public class Usuario {//en este padre lo que se hará será construir todos aque
         return paraObtencion;    
     }            
     
+    
+    
     /**
      * Empleado en el método "para el mouse clicked" ya que 
      * por medio de este es posible establecer el límite de
-     * venta de un producto en específico... xD
-     * 
-     * @param IDtienda
-     * @param IDproducto
+     * venta de un producto en específico...xD
+     *
+     * @param tipoDato
+     * @param requisito1
+     * @param requisito2
+     
      * @return
      */
-    public String[] obtenerCantidad(String IDtienda, String IDproducto){
-        paraObtencion[0]="cantidad";
-        paraObtencion[1]="Tienda_Producto";
-        paraObtencion[4]="IDTienda = "+IDtienda+ " AND "+"IDproducto = "+ IDproducto;
+    public String[] obtenerCantidad(int tipoDato, String requisito1, String requisito2){//1.> cantidadProducto, 2.> # de venta, 3.> codigoPedido        
+        paraObtencion[0]=palabrasParaObtenerValor[tipoDato][0];//la columna a traer
+        paraObtencion[1]=palabrasParaObtenerValor[tipoDato][1];//tabla de obtneción            
+        
+        if(tipoDato==3){//es decir si el dato a traer será de pedido            
+            paraObtencion[4]=palabrasParaObtenerValor[tipoDato][2]+" = "+requisito1;
+        }else{            
+            paraObtencion[4]=palabrasParaObtenerValor[tipoDato][2]+" = "+requisito1+ " AND "+ palabrasParaObtenerValor[tipoDato][3]+" = "+ requisito2;            
+        }        
         
         return paraObtencion;
+    }
+    
+    public String[] insertarEnTablasCompuestas(){
+    
+        return //se retornará el arreglo general para inserción.. solo que aún no lo coloco porque hay que definir cuantos comando mysql podrían necesitarse para hacer cualquier inserción aquí requerida;
     }
     
     public String definirLugarBusqueda(String[] codigoTiendas){
@@ -101,7 +125,7 @@ public class Usuario {//en este padre lo que se hará será construir todos aque
         
     public void registrarse(){    
         
-    }
+    }        
     
     public int darLugarBusqueda(){
         return lugarBusqueda;

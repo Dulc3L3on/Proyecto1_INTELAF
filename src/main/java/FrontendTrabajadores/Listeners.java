@@ -35,7 +35,7 @@ public class Listeners {//esto es practicemente forntendn así que no habrá pro
             ManejadorDB.resultadosConsulta=ManejadorDB.instrucciones.executeQuery(manejadorDB.construirConsulta(usuario.buscarProducto(1, usuario.definirLugarBusqueda(codigoTiendas), codigoProducto)));//siempre será 1 el lugar de búsqueda el parámetro en este método porque es una búsqueda específica, ya sea que se haya hecho en la tienda actual o en otras la búsqueda general, pero por el hecho de que no en ambas muestro el código de la tienda, es necesario que sepa que tipo de búsqueda hice para saber de donde debo ir a traer dicho código  // por el hecho de que es algo repetido            
             cadenaDescripcion[1]=(ManejadorDB.resultadosConsulta.getString(1));
             
-            ManejadorDB.resultadosConsulta=ManejadorDB.instrucciones.executeQuery(manejadorDB.construirConsulta(usuario.obtenerCantidad(usuario.definirLugarBusqueda(codigoTiendas), codigoProducto)));//se establece el límite del spinner por medio de la cantidad que en la DB se encuentra           
+            ManejadorDB.resultadosConsulta=ManejadorDB.instrucciones.executeQuery(manejadorDB.construirConsulta(usuario.obtenerCantidad(1, usuario.definirLugarBusqueda(codigoTiendas), codigoProducto)));//se establece el límite del spinner por medio de la cantidad que en la DB se encuentra           
             cadenaDescripcion[0]=String.valueOf(ManejadorDB.resultadosConsulta.getInt(1));//pues solo tiene una columna xD
            
             return cadenaDescripcion;

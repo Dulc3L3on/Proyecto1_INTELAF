@@ -28,7 +28,8 @@ public class ModoCajero extends javax.swing.JFrame {
         //AUNQUE PENSÁNDOLO BIEN, NO DEBERÍA SER STATIC PORQUE EL BTN PARA VENDER PEDIDO [de consultas] mandará lo seleccionado [accediendo nuevamente a la DB o copiando la fila select...] al txtF donde ya solo resta clickear el btn para añadir el [los] subpedidos a ventas para que dejen de ser pedidos y pasen a mannos de su dueño xD
        
         tbl_tablaConsultas = new JTable(modeloConsulta);//esto solo será útil para el btn de vender pedido, de la ventana de consultas cuando el cliente ha olvidado su número                
-        
+        //se obtiene el codigo de la tienda, del cbBx de Home ya que los trabajadores pueden ser dirigidos hacia cualquier tienda ya que rota :v xD
+        cajero.establecerTiendaDeTrabajo(lbl_codigoTiendaActual.getText());
     }
 
     /**
@@ -55,7 +56,9 @@ public class ModoCajero extends javax.swing.JFrame {
         jLabel10 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
         scrllP_ventas = new javax.swing.JScrollPane();
+        jList1 = new javax.swing.JList<>();
         scrllP_pedidos = new javax.swing.JScrollPane();
+        jList2 = new javax.swing.JList<>();
         jLabel11 = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
         txt_productoSeleccionado = new javax.swing.JTextField();
@@ -167,8 +170,24 @@ public class ModoCajero extends javax.swing.JFrame {
         jButton1.setText("ACEPTAR");
         getContentPane().add(jButton1);
         jButton1.setBounds(1070, 940, 130, 40);
+
+        jList1.setModel(new javax.swing.AbstractListModel<String>() {
+            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+            public int getSize() { return strings.length; }
+            public String getElementAt(int i) { return strings[i]; }
+        });
+        scrllP_ventas.setViewportView(jList1);
+
         getContentPane().add(scrllP_ventas);
         scrllP_ventas.setBounds(660, 70, 550, 370);
+
+        jList2.setModel(new javax.swing.AbstractListModel<String>() {
+            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+            public int getSize() { return strings.length; }
+            public String getElementAt(int i) { return strings[i]; }
+        });
+        scrllP_pedidos.setViewportView(jList2);
+
         getContentPane().add(scrllP_pedidos);
         scrllP_pedidos.setBounds(660, 520, 550, 390);
 
@@ -303,11 +322,12 @@ public class ModoCajero extends javax.swing.JFrame {
     private void lblBtn_agregarProductoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblBtn_agregarProductoMouseClicked
         String tiendaBusqueda=lbl_codigoTiendaActual.getText();
         
-        if(cajero.lugarBusqueda==2){//Es decir que se encuentra en otra tienda
+        if(cajero.lugarBusqueda==2){//Es decir que se encuentra en otra tienda y por ello es un pedido
             tiendaBusqueda=(String)ModoCajero.modeloConsulta.getValueAt(tbl_tablaConsultas.getSelectedRow(), tbl_tablaConsultas.getSelectedColumn());
         }
         
-        cajero.buscarCantidad(tiendaBusqueda, tiendaBusqueda);
+        cajero.anadirProducto(codigoTiendas, tiendaBusqueda, WIDTH);
+        
         
         
     }//GEN-LAST:event_lblBtn_agregarProductoMouseClicked
@@ -343,6 +363,8 @@ public class ModoCajero extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel8;
+    private javax.swing.JList<String> jList1;
+    private javax.swing.JList<String> jList2;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
