@@ -10,18 +10,18 @@ package ManejoDeInformacion;
  * @author phily
  */
 public class ListaEnlazada<E> {
-      private Nodo<E> primerNodo;//posee el primero objeto puesto que así se sabe de donde partir
+    private Nodo<E> primerNodo;//posee el primero objeto puesto que así se sabe de donde partir
     private Nodo<E> ultimoNodo;//obtiene el último elemento, el cual de forma directa ayuda a saber si tiene o no elementos
-    private char nombreLista;//podría tener nombre,, solo debes pensar como se lo asignarás
+    private String nombreLista;//podría tener nombre,, solo debes pensar como se lo asignarás
     private int tamanioLista;
     private int tamanioFinal;//Esta var será útil para las propiedades, pues esta contiene el número de elementos totales que contiene un grupo, en este caso almacenado en una lista
-    //private Casilla casillaAnadida;
+    E contenidoELiminado;    
     
     public ListaEnlazada(){
         inicializarLista();
     }
     
-    public ListaEnlazada(char nombreLista){//Este será empleado para las propiedades del jugador
+    public ListaEnlazada(String nombreLista){//Este será empleado para las propiedades del jugador
         this();
         establecerNOmbre(nombreLista);
     }
@@ -30,9 +30,10 @@ public class ListaEnlazada<E> {
         //si tine nombre aquí deberías indicarlo
         primerNodo=ultimoNodo=null;//porque no tienen ningun elemento
         tamanioLista=0;
+        nombreLista="";
     }
     
-    public void establecerNOmbre(char nombre){
+    public void establecerNOmbre(String nombre){
         nombreLista=nombre;
     }
     
@@ -56,6 +57,56 @@ public class ListaEnlazada<E> {
         inicializarLista();
     }
     
+    public E obtnerContenidoEn(int nodoDeInteres){//su valor inicial es 1
+        Nodo<E> nodoAuxiliar = primerNodo;
+        
+        for (int nodoActual = 1; nodoActual < nodoDeInteres; nodoActual++) {//claro, debes fijarte que ese valor de nodo sea <= al tamaño de la lista, pero eso afuera! xD
+            nodoAuxiliar=nodoAuxiliar.nodoSiguiente;
+        }
+        
+        return nodoAuxiliar.contenido;
+    }
+    
+    public Nodo<E> obtnerNodoEn(int numeroNodo){
+        Nodo<E> nodoAuxiliar = primerNodo;
+        
+        for (int nodoActual = 1; nodoActual < numeroNodo; nodoActual++) {//claro, debes fijarte que ese valor de nodo sea <= al tamaño de la lista, pero eso afuera! xD
+            nodoAuxiliar=nodoAuxiliar.nodoSiguiente;
+        }
+        
+        return nodoAuxiliar;//es lo mismo pero devuelvo un nodo... la verda sale más eficiente obtner el nodo y luego establecerle el contenido directametne en lugar de terne que estar recorriedno otra vez al listado porque se obtuvo de una vez al contenido...
+    }
+    
+    
+    public void eliminarNodoEn(int nodoAELiminar){         
+        
+        if(nodoAELiminar==1){
+            contenidoELiminado=primerNodo.contenido;
+            primerNodo=primerNodo.nodoSiguiente;
+            
+        }else{
+            Nodo<E> nodoAuxiliar = primerNodo;
+            
+            for (int nodoActual = 1; nodoActual < (nodoAELiminar-1); nodoActual++) {
+                nodoAuxiliar=nodoAuxiliar.nodoSiguiente;
+            }
+            
+            contenidoELiminado=nodoAuxiliar.nodoSiguiente.contenido;
+            
+            if(nodoAELiminar==tamanioLista){
+                
+                nodoAuxiliar.nodoSiguiente=null;
+                ultimoNodo=nodoAuxiliar;//Si no estaría apuntando a null...
+            }else{
+                nodoAuxiliar.nodoSiguiente=nodoAuxiliar.nodoSiguiente.nodoSiguiente;//pues así me salto al nodo que se quiere eliminar
+            }                        
+        }        
+        
+    }
+    
+    public E retornarContenidoEliminado(){
+        return contenidoELiminado;
+    }
     
     /**
      * Empleado al: editar una casilla que ya se encontraba definida con anterioridad, ya sea en crear o al editarla
@@ -89,13 +140,13 @@ public class ListaEnlazada<E> {
     
     /**
      * Este método será eficiente para obtner la lista de los datos de
-     * los nodos especificados de una lista formada anteriormente, siempre
+     * los nodos especificados de la versión anterior de la lista, siempre
      * y cuando se le manden en orden...
      * 
      * @param listadoIndices     
      * @return      
      */
-    public ListaEnlazada<E> obtnerContenidoListado(ListaEnlazada<Integer> listadoIndices){
+    public ListaEnlazada<E> obtnerListadoFiltrado(ListaEnlazada<Integer> listadoIndices){
         ListaEnlazada<E> listaFiltrada = new ListaEnlazada();
         Nodo<Integer> nodoActual = listadoIndices.obtnerPrimerNodo();
         Nodo<E> nodoAuxiliar = primerNodo;
@@ -160,7 +211,7 @@ public class ListaEnlazada<E> {
         return tamanioFinal;
     }
     
-    public char obtenerNombre(){
+    public String obtenerNombre(){
         return nombreLista;
     }   
     

@@ -5,12 +5,21 @@
  */
 package FrontendTrabajadores;
 
+
+import BackendEntidades.Cajero;
+import BackendEntidades.Gerente;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author phily
  */
-public class NuevoUsuario extends javax.swing.JFrame {
-
+public class NuevoUsuario extends javax.swing.JFrame {//solo se encarga de crear o modificar al usuario, es decir su función principal es dar un espacio para ingresar información que mandará a la DB y solo xD, si quieres obtner info de aquí, vuelve a exe otra consulta, solo que esta vez para seleccionar, en lugar de insertar...
+    String[] datosUsuario= new String[7];//Se envían alamacenan los datos a registrar ya sea de cliente o trabajador, app tanto para modifs como para creaciones, lo dejo de tam 7, porque de esa manera 
+    //no tendré que hacer extras con el crédito, porque cuando sea cliente el espacio que le corresponde al crédito será NULL y por ello allá en la tabla se establecerá como default 0 xD, sino sucediera así entonce solo le seteas 0 y ya :v xD JAJAJAJ además recuerda que se almacenará como string para no estarse preocupando por las conversiones...
+    Cajero cajero = new Cajero();
+    Gerente gerente = new Gerente();    
+    
     /**
      * Creates new form NuevoCliente
      */
@@ -39,8 +48,10 @@ public class NuevoUsuario extends javax.swing.JFrame {
         txtF_Telefono = new javax.swing.JTextField();
         FtxtF_Correo = new javax.swing.JFormattedTextField();
         txtF_Direccion = new javax.swing.JTextField();
-        lbl_NIT = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
+        btn_agregar = new javax.swing.JButton();
+        lbl_nitTrabajador = new javax.swing.JLabel();
+        txtF_nitParaTrabajador = new javax.swing.JTextField();
+        txt_codigoUsuario = new javax.swing.JTextField();
         lbl_Fondo = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -57,72 +68,188 @@ public class NuevoUsuario extends javax.swing.JFrame {
         lbl_tituloOperacion.setText("NUEVO CLIENTE");
         lbl_tituloOperacion.setOpaque(true);
         getContentPane().add(lbl_tituloOperacion);
-        lbl_tituloOperacion.setBounds(0, 30, 580, 30);
+        lbl_tituloOperacion.setBounds(0, 30, 540, 30);
 
         jLabel1.setFont(new java.awt.Font("Sawasdee", 1, 20)); // NOI18N
         jLabel1.setText("NIT:");
         getContentPane().add(jLabel1);
-        jLabel1.setBounds(90, 160, 50, 35);
+        jLabel1.setBounds(20, 80, 50, 35);
 
         jLabel3.setFont(new java.awt.Font("Sawasdee", 1, 20)); // NOI18N
         jLabel3.setText("NOMBRE:");
         getContentPane().add(jLabel3);
-        jLabel3.setBounds(90, 120, 120, 35);
+        jLabel3.setBounds(80, 140, 120, 35);
 
         jLabel4.setFont(new java.awt.Font("Sawasdee", 1, 20)); // NOI18N
         jLabel4.setText("DPI:");
         getContentPane().add(jLabel4);
-        jLabel4.setBounds(90, 200, 50, 35);
+        jLabel4.setBounds(80, 220, 50, 35);
 
         jLabel5.setFont(new java.awt.Font("Sawasdee", 1, 20)); // NOI18N
-        jLabel5.setText("No. TELÉFONO:");
+        jLabel5.setText("No. TEL:");
         getContentPane().add(jLabel5);
-        jLabel5.setBounds(90, 240, 170, 30);
+        jLabel5.setBounds(80, 180, 100, 30);
 
         jLabel6.setFont(new java.awt.Font("Sawasdee", 1, 20)); // NOI18N
         jLabel6.setText("CORREO:");
         getContentPane().add(jLabel6);
-        jLabel6.setBounds(90, 280, 91, 35);
+        jLabel6.setBounds(80, 260, 91, 35);
 
         jLabel7.setFont(new java.awt.Font("Sawasdee", 1, 20)); // NOI18N
         jLabel7.setText("DIRECCIÓN:");
         getContentPane().add(jLabel7);
-        jLabel7.setBounds(90, 320, 140, 35);
+        jLabel7.setBounds(80, 300, 140, 35);
         getContentPane().add(txtF_Nombre);
-        txtF_Nombre.setBounds(200, 120, 190, 28);
+        txtF_Nombre.setBounds(190, 140, 190, 28);
         getContentPane().add(txtF_DPI);
-        txtF_DPI.setBounds(140, 200, 150, 28);
+        txtF_DPI.setBounds(190, 220, 150, 28);
         getContentPane().add(txtF_Telefono);
-        txtF_Telefono.setBounds(260, 240, 130, 28);
+        txtF_Telefono.setBounds(190, 180, 130, 28);
         getContentPane().add(FtxtF_Correo);
-        FtxtF_Correo.setBounds(200, 280, 190, 28);
+        FtxtF_Correo.setBounds(190, 260, 190, 28);
         getContentPane().add(txtF_Direccion);
-        txtF_Direccion.setBounds(220, 320, 170, 28);
+        txtF_Direccion.setBounds(210, 300, 170, 28);
 
-        lbl_NIT.setBackground(new java.awt.Color(224, 215, 205));
-        lbl_NIT.setOpaque(true);
-        getContentPane().add(lbl_NIT);
-        lbl_NIT.setBounds(140, 160, 150, 30);
+        btn_agregar.setFont(new java.awt.Font("Sawasdee", 1, 19)); // NOI18N
+        btn_agregar.setText("AGREGAR");
+        btn_agregar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_agregarActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btn_agregar);
+        btn_agregar.setBounds(370, 390, 130, 50);
 
-        jButton1.setFont(new java.awt.Font("Sawasdee", 1, 19)); // NOI18N
-        jButton1.setText("AGREGAR");
-        getContentPane().add(jButton1);
-        jButton1.setBounds(420, 380, 130, 50);
+        lbl_nitTrabajador.setFont(new java.awt.Font("Sawasdee", 1, 20)); // NOI18N
+        lbl_nitTrabajador.setText("NIT:");
+        getContentPane().add(lbl_nitTrabajador);
+        lbl_nitTrabajador.setBounds(80, 340, 40, 30);
+        getContentPane().add(txtF_nitParaTrabajador);
+        txtF_nitParaTrabajador.setBounds(140, 340, 170, 28);
+
+        txt_codigoUsuario.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txt_codigoUsuarioKeyPressed(evt);
+            }
+        });
+        getContentPane().add(txt_codigoUsuario);
+        txt_codigoUsuario.setBounds(90, 80, 190, 28);
 
         lbl_Fondo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/sencillo-fondo-poligonal-amarillo_1057-2586.jpg"))); // NOI18N
         getContentPane().add(lbl_Fondo);
-        lbl_Fondo.setBounds(0, 0, 580, 460);
+        lbl_Fondo.setBounds(0, 0, 540, 460);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void txt_codigoUsuarioKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txt_codigoUsuarioKeyPressed
+            //Esto es solo para gerente porque hay que revisar que el código que ingrese no sea repetido...
+    }//GEN-LAST:event_txt_codigoUsuarioKeyPressed
+
+    private void btn_agregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_agregarActionPerformed
+        if(revisarCamposObligatorios()){
+            //se guardan en el arreglo local los datos, para ser mandados a la DB
+            //de tal manera que en el paso siguente de la pseudoFactura, puedan obtenerse
+            obtnerInfoIngresada();//se guardaron los datos en el arreglo
+            
+            
+            this.dispose();
+        }else{
+            JOptionPane.showMessageDialog(null, "Hacen falta llenar campos obligatorios", "", JOptionPane.WARNING_MESSAGE);
+        }
+    }//GEN-LAST:event_btn_agregarActionPerformed
+
     public void establecerTituloCorrecto(String tituloOperacion){
-        lbl_tituloOperacion.setText(tituloOperacion);
+        lbl_tituloOperacion.setText(tituloOperacion);                
+        
+        prepararInterfazSegun();//no veo necesidad de estar recibiendo parámetros...
     }
+    
+    public void recibirNITnuevoCliente(String nit){
+        txt_codigoUsuario.setText(nit);
+    }
+    
+    /**
+     * llamdao antes de hacer visible este diálogo, de igual manera
+     * para el caso de los campos obligatorios cuando se tnega a uno
+     * u otro usuario se app pero, se revisará cuando presione el 
+     * btn aceptar      
+     */
+    private void prepararInterfazSegun(){
+        if(lbl_tituloOperacion.getText().endsWith("CLIENTE")){
+            txt_codigoUsuario.setEditable(false);
+            lbl_nitTrabajador.setVisible(false);
+            txtF_nitParaTrabajador.setVisible(false);
+            
+        }else{
+            txt_codigoUsuario.setEditable(true);
+            lbl_nitTrabajador.setVisible(true);        
+            txtF_nitParaTrabajador.setVisible(true);
+        }
+    }
+    
+    private void obtnerInfoIngresada(){
+        datosUsuario[0]=txtF_Nombre.getText();
+        datosUsuario[1]=txt_codigoUsuario.getText();
+        datosUsuario[2]=txtF_Telefono.getText();
+        if(lbl_tituloOperacion.getText().endsWith("CLIENTE")){            
+            datosUsuario[4]=txtF_DPI.getText();
+        }else{
+            datosUsuario[3]=txtF_DPI.getText();
+            datosUsuario[4]=txtF_nitParaTrabajador.getText();
+        }//y así se resuleve el problema de los valores diferentes en el mismo espacio del arreglo xD
+        datosUsuario[5]=FtxtF_Correo.getText();
+        datosUsuario[6]=txtF_Direccion.getText();                        
+    }
+    
+    private boolean revisarCamposObligatorios(){       
+        
+        if(txtF_Nombre.getText()==null){
+            return false;
+        }
+        
+        if(txtF_Telefono.getText()==null){
+            return false;
+        }
+        
+        if(lbl_tituloOperacion.getText().endsWith("EMPLEADO")){
+            return revisarCamposObligatoriosTrabajadores();//si llega hasta aquí y devuelve true entonces todo en orden [cuando es empleado, sino sería con el return de abajito xD]                    
+        }
+        
+        return true;
+    }
+    
+    private boolean revisarCamposObligatoriosTrabajadores(){
+        if(txtF_DPI.getText()==null){
+            return false;
+        }
+        if(FtxtF_Correo.getText()==null){
+            return false;
+        }
+        if(txtF_Direccion.getText()==null){
+            return false;
+        }
+        
+        return true;
+    }   
+    
+    public void registrarUsuario(){//Este será el método empleado para la creación, a parte es para actualizar
+        if(lbl_tituloOperacion.getText().endsWith("CLIENTE")){
+            cajero.registrarDatosCliente(datosUsuario);
+        }else{
+            gerente.registrarDatosTrabajador(datosUsuario);
+        }
+    
+    }
+    
+    
+    //NO OLVIDES QUE ESTE MÉTODO SOLO SE ENCARGA DE REGISTRAR AL CLIENTE NO DE MANDAR 
+    //AL LUGAR DE DONDE FUE LLAMADO ESTE MÉTODO, LOS VALORES QUE SOLICITAN
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JFormattedTextField FtxtF_Correo;
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton btn_agregar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -130,11 +257,13 @@ public class NuevoUsuario extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel lbl_Fondo;
-    private javax.swing.JLabel lbl_NIT;
+    private javax.swing.JLabel lbl_nitTrabajador;
     private javax.swing.JLabel lbl_tituloOperacion;
     private javax.swing.JTextField txtF_DPI;
     private javax.swing.JTextField txtF_Direccion;
     private javax.swing.JTextField txtF_Nombre;
     private javax.swing.JTextField txtF_Telefono;
+    private javax.swing.JTextField txtF_nitParaTrabajador;
+    private javax.swing.JTextField txt_codigoUsuario;
     // End of variables declaration//GEN-END:variables
 }

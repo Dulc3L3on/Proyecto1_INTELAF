@@ -38,8 +38,10 @@ public class listadoLineasErradas extends javax.swing.JDialog {
         lbl_Fondo = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setMaximumSize(new java.awt.Dimension(551, 490));
-        setMinimumSize(new java.awt.Dimension(551, 490));
+        setMaximumSize(new java.awt.Dimension(650, 790));
+        setMinimumSize(new java.awt.Dimension(650, 790));
+        setModal(true);
+        setPreferredSize(new java.awt.Dimension(650, 790));
         setResizable(false);
         getContentPane().setLayout(null);
 
@@ -49,7 +51,7 @@ public class listadoLineasErradas extends javax.swing.JDialog {
         jLabel2.setText("<<LINEAS ERRADAS>>");
         jLabel2.setOpaque(true);
         getContentPane().add(jLabel2);
-        jLabel2.setBounds(0, 20, 640, 30);
+        jLabel2.setBounds(0, 20, 660, 30);
 
         txtA_listado.setEditable(false);
         txtA_listado.setColumns(20);
@@ -58,7 +60,7 @@ public class listadoLineasErradas extends javax.swing.JDialog {
         jScrollPane1.setViewportView(txtA_listado);
 
         getContentPane().add(jScrollPane1);
-        jScrollPane1.setBounds(30, 120, 570, 580);
+        jScrollPane1.setBounds(30, 110, 590, 590);
 
         jLabel1.setBackground(new java.awt.Color(154, 147, 139));
         jLabel1.setFont(new java.awt.Font("Sawasdee", 1, 17)); // NOI18N
@@ -74,24 +76,40 @@ public class listadoLineasErradas extends javax.swing.JDialog {
         lbl_Fondo.setVerticalAlignment(javax.swing.SwingConstants.TOP);
         lbl_Fondo.setOpaque(true);
         getContentPane().add(lbl_Fondo);
-        lbl_Fondo.setBounds(0, 0, 640, 730);
+        lbl_Fondo.setBounds(0, 0, 660, 740);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    public void recibirDatos(ListaEnlazada<String> listaErrada, ListaEnlazada<Integer> listadoIndices){
+    public void mostrarDatos(ListaEnlazada<String> listaErrada, boolean agregarNumeroLinea){//este listado de líneas sería para indicar la linea del archivo donde se encontró el error
+        if(agregarNumeroLinea==true){
+            mostrarDatosNumerdosAutomaticamente(listaErrada);
+        }else{
+            mostrarDatosConLineasDadas(listaErrada);
+        }                
+    }
+    
+    private void mostrarDatosConLineasDadas(ListaEnlazada<String> listaErrada){//Este método debe ser llamado hasta que se conozca que se ha terminado el proceso donde pueden existir errores
         Nodo<String> nodoLinea= listaErrada.obtnerPrimerNodo();
-        Nodo<Integer> nodoNumeroLinea = listadoIndices.obtnerPrimerNodo();
+        
         txtA_listado.append("Linea     Descripción");
         
         
         for (int nodoActual = 0; nodoActual < listaErrada.darTamanio(); nodoActual++) {
-            txtA_listado.append("["+ nodoNumeroLinea.contenido+"]"+nodoLinea.contenido);
+            txtA_listado.append(nodoLinea.contenido+"\n");            
             
-            nodoLinea=nodoLinea.nodoSiguiente;
-            nodoNumeroLinea=nodoNumeroLinea.nodoSiguiente;
-        }
+            nodoLinea=nodoLinea.nodoSiguiente;            
+        }                               
+    }
+    
+    private void mostrarDatosNumerdosAutomaticamente(ListaEnlazada<String> listaErrada){
+        Nodo<String> nodoAuxiliar = listaErrada.obtnerPrimerNodo();
         
+        for (int nodoActual = 0; nodoActual < listaErrada.darTamanio(); nodoActual++) {
+            txtA_listado.append("[ "+ nodoActual+" ]"+"   " +nodoAuxiliar.contenido+"\n");
+            
+            nodoAuxiliar=nodoAuxiliar.nodoSiguiente;                        
+        }
     }
     
 

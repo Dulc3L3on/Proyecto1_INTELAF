@@ -5,9 +5,13 @@
  */
 package FrontendTrabajadores;
 
-import BackendTrabajadores.Cajero;
-import BackendTrabajadores.Usuario;
-import ManejoDeInformacion.ManejadorDB;
+import BackendEntidades.Cajero;
+import BackendEntidades.Trabajador;
+import java.awt.event.MouseEvent;
+import java.util.Collection;
+import javax.swing.DefaultListModel;
+import javax.swing.JComboBox;
+import javax.swing.JList;
 import javax.swing.JTable;
 
 /**
@@ -16,9 +20,13 @@ import javax.swing.JTable;
  */
 public class ModoCajero extends javax.swing.JFrame {
     public static ResultSetTableModel modeloConsulta = new ResultSetTableModel();
-    Cajero cajero = new Cajero();//Ahí te recuerdas que si no manda nada, es por el hecho de estar trabajando con el arreglo del padre y tener instanciado al hijo... pero yo recuerdo que debería funcionar correctamente xD
-    ManejadorDB manejadorDB = new ManejadorDB();
-    Listeners listener = new Listeners();                
+    public static Cajero cajero;//RECUERDA todas las variables que estén en el modo con el mismo nombre deben ser ESTÁTICAS por el hecho de que donde quiere que esté debe conocer todo lo que se ha hecho y no empezar desde 0,     
+    public static DefaultListModel modeloLista[] = new DefaultListModel[2]; 
+    public static JComboBox comboTiendasDestino;    
+    
+    Listeners listener = new Listeners();    
+    MenuEmergente popup = new MenuEmergente(new javax.swing.JFrame(), true);
+    PasoFinal datosFinalesTransaccion = new PasoFinal(new javax.swing.JFrame(), true);
     
     /**
      * Creates new form ModoCajero
@@ -27,9 +35,14 @@ public class ModoCajero extends javax.swing.JFrame {
         initComponents();
         //AUNQUE PENSÁNDOLO BIEN, NO DEBERÍA SER STATIC PORQUE EL BTN PARA VENDER PEDIDO [de consultas] mandará lo seleccionado [accediendo nuevamente a la DB o copiando la fila select...] al txtF donde ya solo resta clickear el btn para añadir el [los] subpedidos a ventas para que dejen de ser pedidos y pasen a mannos de su dueño xD
        
+        cajero = new Cajero(lbl_codigoTiendaActual.getText());
+        comboTiendasDestino=cbBx_codigosTiendasDestino;
         tbl_tablaConsultas = new JTable(modeloConsulta);//esto solo será útil para el btn de vender pedido, de la ventana de consultas cuando el cliente ha olvidado su número                
-        //se obtiene el codigo de la tienda, del cbBx de Home ya que los trabajadores pueden ser dirigidos hacia cualquier tienda ya que rota :v xD
-        cajero.establecerTiendaDeTrabajo(lbl_codigoTiendaActual.getText());
+        modeloLista[0] = new DefaultListModel();
+        lst_ventasARealizar= new JList(modeloLista[0]);
+        modeloLista[1] = new DefaultListModel();
+        lst_pedidosARealizar= new JList(modeloLista[1]);                
+        
     }
 
     /**
@@ -54,11 +67,11 @@ public class ModoCajero extends javax.swing.JFrame {
         jLabel8 = new javax.swing.JLabel();
         lbl_home = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
+        btn_generarTransaccion = new javax.swing.JButton();
         scrllP_ventas = new javax.swing.JScrollPane();
-        jList1 = new javax.swing.JList<>();
+        lst_ventasARealizar = new javax.swing.JList<>();
         scrllP_pedidos = new javax.swing.JScrollPane();
-        jList2 = new javax.swing.JList<>();
+        lst_pedidosARealizar = new javax.swing.JList<>();
         jLabel11 = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
         txt_productoSeleccionado = new javax.swing.JTextField();
@@ -139,6 +152,7 @@ public class ModoCajero extends javax.swing.JFrame {
         scrllP_consultas.setBounds(30, 190, 560, 370);
 
         lblBtn_agregarProducto.setIcon(new javax.swing.ImageIcon(getClass().getResource("/1294762.png"))); // NOI18N
+        lblBtn_agregarProducto.setEnabled(false);
         lblBtn_agregarProducto.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 lblBtn_agregarProductoMouseClicked(evt);
@@ -166,27 +180,32 @@ public class ModoCajero extends javax.swing.JFrame {
         getContentPane().add(jLabel10);
         jLabel10.setBounds(40, 130, 90, 30);
 
-        jButton1.setFont(new java.awt.Font("Sawasdee", 1, 20)); // NOI18N
-        jButton1.setText("ACEPTAR");
-        getContentPane().add(jButton1);
-        jButton1.setBounds(1070, 940, 130, 40);
-
-        jList1.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
+        btn_generarTransaccion.setFont(new java.awt.Font("Sawasdee", 1, 20)); // NOI18N
+        btn_generarTransaccion.setText("Generar");
+        btn_generarTransaccion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_generarTransaccionActionPerformed(evt);
+            }
         });
-        scrllP_ventas.setViewportView(jList1);
+        getContentPane().add(btn_generarTransaccion);
+        btn_generarTransaccion.setBounds(1070, 940, 130, 40);
+
+        lst_ventasARealizar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                lst_ventasARealizarMousePressed(evt);
+            }
+        });
+        scrllP_ventas.setViewportView(lst_ventasARealizar);
 
         getContentPane().add(scrllP_ventas);
         scrllP_ventas.setBounds(660, 70, 550, 370);
 
-        jList2.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
+        lst_pedidosARealizar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                lst_pedidosARealizarMousePressed(evt);
+            }
         });
-        scrllP_pedidos.setViewportView(jList2);
+        scrllP_pedidos.setViewportView(lst_pedidosARealizar);
 
         getContentPane().add(scrllP_pedidos);
         scrllP_pedidos.setBounds(660, 520, 550, 390);
@@ -227,6 +246,11 @@ public class ModoCajero extends javax.swing.JFrame {
 
         cbBx_codigosTiendasDestino.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         cbBx_codigosTiendasDestino.setEnabled(false);
+        cbBx_codigosTiendasDestino.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbBx_codigosTiendasDestinoActionPerformed(evt);
+            }
+        });
         getContentPane().add(cbBx_codigosTiendasDestino);
         cbBx_codigosTiendasDestino.setBounds(30, 670, 190, 28);
 
@@ -275,13 +299,13 @@ public class ModoCajero extends javax.swing.JFrame {
     }//GEN-LAST:event_txtF_codigoActionPerformed
 
     private void txtF_codigoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtF_codigoKeyPressed
-                   
+    /*Terminado*/       
         if(evt.getKeyCode()== java.awt.event.KeyEvent.VK_ENTER){//por exe cuando presionen ENTER se provocará que puedan mostrarse coin ya que no se habrá especificado bien el código y con ello simular a lo que google hace para dar coincidencias en la búsqueda ingresada xD
             //se manda a llamar al método para realizar la consulta, esto según el rbtn que esté seleccionado
             //pues si es productos será el método buscarProductos, sino entonces será buscarPedido           
-            
+          if(determinarTipoBusqueda()==1){
             for(int tiendaDeBusqueda = 1; tiendaDeBusqueda <= 2; tiendaDeBusqueda++){//es decir esta ó las otras xD... de alguna manera tengo que enterarme si se encontró en la tienda actual, para permitir que se pase al siguiente ídice del for y con ello revisar a las otras tiendas xD
-                modeloConsulta.mostrarConsulta(cajero.buscar(determinarTipoBusqueda(), txtF_codigo.getText(), tiendaDeBusqueda, lbl_codigoTiendaActual.getText()));//el código de la tienda tb lo pude haber obtenido del cbCOdigosTIendaDestino, no habría problema cuando seleccionara a otra tienda porque este proceso ya habría pasado entonces...
+                modeloConsulta.mostrarConsulta(cajero.buscar(1, txtF_codigo.getText(), tiendaDeBusqueda));//el código de la tienda tb lo pude haber obtenido del cbCOdigosTIendaDestino, no habría problema cuando seleccionara a otra tienda porque este proceso ya habría pasado entonces...
                 //recuerda que todo lo que quieras saber a cerca de la info de la tabla, lo puedes obtner del modelo, por el hecho de ser quien posee a toda la info
                 
                 if(tbl_tablaConsultas.getRowCount()==0){//esto indicaría que no se encontró nada en la tienda actual
@@ -291,7 +315,9 @@ public class ModoCajero extends javax.swing.JFrame {
                     tiendaDeBusqueda=3;//para parar xD
                 }
             }
-            
+          }else{//es decir que se requiere buscar los pedidos listos...
+            modeloConsulta.mostrarConsulta(cajero.buscar(2, txtF_codigo.getText(), 1));
+          }                                                
         }
         
     }//GEN-LAST:event_txtF_codigoKeyPressed
@@ -314,23 +340,103 @@ public class ModoCajero extends javax.swing.JFrame {
     }//GEN-LAST:event_txtF_codigoKeyTyped
 
     private void tbl_tablaConsultasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbl_tablaConsultasMouseClicked
-        String[] informacion=listener.paraMouseClicked(lbl_codigoTiendaActual.getText(), (String)modeloConsulta.getValueAt(1,1),tbl_tablaConsultas.getSelectedRow(), tbl_tablaConsultas.getSelectedColumn());//se obtiene la descripción del producto desde la DB
+        /*Terminado para los dos tipos de búsqueda :3*/
+        
+        String[] informacion=listener.paraMouseClicked(determinarTipoBusqueda(), lbl_codigoTiendaActual.getText(), (String)modeloConsulta.getValueAt(1,1),tbl_tablaConsultas.getSelectedRow());//se obtiene la descripción del producto desde la DB
         establecerDescripcion(informacion[1]);//al obtener el código del producto mando 1,1 porque sin importar cual se haya seleccionado se tendrá el mismo cód y además como el mín de filas es 1, y estas tablas comienzan a contar desde 1 entonces cabal... de todos modos revisa desde que valor comienza a contar las filas y cols
-        establecerLimiteVentas(Integer.parseInt(informacion[0]));        
+        establecerLimiteVentas(Integer.parseInt(informacion[0]));  
+        if(txt_productoSeleccionado.getText()!=null){// y debería haber otra para cuando no sea un pedido real...
+           lblBtn_agregarProducto.setEnabled(true); 
+        }        
     }//GEN-LAST:event_tbl_tablaConsultasMouseClicked
 
     private void lblBtn_agregarProductoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblBtn_agregarProductoMouseClicked
-        String tiendaBusqueda=lbl_codigoTiendaActual.getText();
+        /*Terminado :3 para los 3 tipos de transacciones uwu*/
         
-        if(cajero.lugarBusqueda==2){//Es decir que se encuentra en otra tienda y por ello es un pedido
-            tiendaBusqueda=(String)ModoCajero.modeloConsulta.getValueAt(tbl_tablaConsultas.getSelectedRow(), tbl_tablaConsultas.getSelectedColumn());
+        String descripcionProductoAgregado= cajero.agregarProducto(txtF_codigo.getText(), (Integer)spn_Cantidad.getValue(), txt_productoSeleccionado.getText(), (Integer)modeloConsulta.getValueAt(tbl_tablaConsultas.getSelectedRow(), 5));          
+        
+        if(determinarTipoBusqueda()==1){//quiere decir que se está tratando con una transacción del momento, no pasada como en el caso de los pedidos
+            if(Trabajador.lugarBusqueda==1){//Es decir que se encuentra en la tienda y por ello no es un pedido
+                if(!descripcionProductoAgregado.isBlank()){//eso quiere decir que si habían productos y que por ello hay más que dos corchetes y un 0 dentro de ellos
+                    modeloLista[0].addElement(descripcionProductoAgregado);//empleo este método puesto que todos deben llegar al final
+                    lst_ventasARealizar.updateUI();
+                }
+            
+            }else{//con el else basta porque aquí no buscará completamente los productos como en el caso del Gerente y Cliente
+                if(!descripcionProductoAgregado.isEmpty()){//vamos a ver cual es el correcto, yo diría que este isEmpty
+                    modeloLista[1].addElement(descripcionProductoAgregado);//y así se agrega justo a la fila que debe para evitar repeticiones :) y se refleje lo hehco enla lista enlazada xD
+                    lst_pedidosARealizar.updateUI();
+                    cbBx_codigosTiendasDestino.setSelectedIndex(0);//para poner de regreso a la tienda de destino a la tienda actual
+                    cbBx_codigosTiendasDestino.setEnabled(false);
+                }            
+            }     
+        }else{//vender un pedido...
+            modeloLista[0].addAll((Collection) cajero.agregarProductoPedidoVendido(Long.parseLong(txtF_codigo.getText()), (double)modeloConsulta.getValueAt(tbl_tablaConsultas.getSelectedRow(), 5), (double)modeloConsulta.getValueAt(tbl_tablaConsultas.getSelectedRow(), 6)));//si no llegara a funcionar, lo que debes hacer es ir leyendo los nodos de la lista para irlos agregando 1 a 1, lo normal xD                                    
+        }//Ya se agregan los productos listos para ser vendidos a la lista y a JList :3       
+        
+        if(!modeloLista[0].isEmpty() || !modeloLista[1].isEmpty()){
+            rbt_productos.setEnabled(false);
+            rbtn_pedidos.setEnabled(false);
         }
         
-        cajero.anadirProducto(codigoTiendas, tiendaBusqueda, WIDTH);
-        
-        
-        
+        lblBtn_agregarProducto.setEnabled(false);//aunque debería ponerle una restricción más para que no se exe si no es una transacción real... o si el txt está vacío por alguna razón...
     }//GEN-LAST:event_lblBtn_agregarProductoMouseClicked
+
+    private void lst_ventasARealizarMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lst_ventasARealizarMousePressed
+        if(popup.isActive()){
+            popup.setVisible(false);
+        }//para que sin importar que btn presione, este menucito se esconda y no habrá problemas con esto, ya que solo tiene un tipo de evento de mouse agregado
+        
+        if(!modeloLista[0].isEmpty() && rbt_productos.isSelected()){//esto es por el hecho de que al tener los datos de un pedido listo, NO debe permitírsele tener estas acciones...
+            if(evt.getButton()==MouseEvent.BUTTON3){//pues específicamente con el btn derecho se muestre el menucito
+                popup.definirObjetoAAfectar(0, lst_ventasARealizar.getSelectedIndex());//recuerda que el número de fila +1 es = al nodo que se debe eliminar o modificar...
+                popup.setLocation(evt.getPoint());
+                popup.setVisible(true);
+            }//recuerda que la acción respectiva a lo seleccionado se escoje en el menucito el cual emplea al listener, definido por tí para realizar uno u otro proceso
+        }/*TERMINADO*///recuerda que en el listener se consideran la situación en la cual al no presionar aceptar, no se hace nada...
+        
+        
+    }//GEN-LAST:event_lst_ventasARealizarMousePressed
+
+    private void lst_pedidosARealizarMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lst_pedidosARealizarMousePressed
+         if(popup.isActive()){
+            popup.setVisible(false);
+        }//para que sin importar que btn presione, este menucito se esconda y no habrá problemas con esto, ya que solo tiene un tipo de evento de mouse agregado
+        
+        if(!modeloLista[1].isEmpty() && rbt_productos.isSelected()){
+            if(evt.getButton()==MouseEvent.BUTTON3){//pues específicamente con el btn derecho se muestre el menucito
+                popup.definirObjetoAAfectar(1, lst_pedidosARealizar.getSelectedIndex());//recuerda que el número de fila +1 es = al nodo que se debe eliminar o modificar...
+                popup.setLocation(evt.getPoint());
+                popup.setVisible(true);
+            }
+        }/*Teminado :3*///recuerda que en la transacción misma es donde se hacen las modif tanto al listado general, como al lustado detallado xD
+    }//GEN-LAST:event_lst_pedidosARealizarMousePressed
+
+    private void cbBx_codigosTiendasDestinoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbBx_codigosTiendasDestinoActionPerformed
+  
+    }//GEN-LAST:event_cbBx_codigosTiendasDestinoActionPerformed
+
+    private void btn_generarTransaccionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_generarTransaccionActionPerformed
+        if(!modeloLista[0].isEmpty() || !modeloLista[1].isEmpty()){
+            if(determinarTipoBusqueda()==2){
+                datosFinalesTransaccion.establecerValoresPorPedidoVendido((double)modeloConsulta.getValueAt(tbl_tablaConsultas.getSelectedRow(), 5), (double)modeloConsulta.getValueAt(tbl_tablaConsultas.getSelectedRow(), 6));
+            }//se establecen los valores cuando sea una venta de pedido xD
+            
+            datosFinalesTransaccion.setLocationRelativeTo(null);
+            datosFinalesTransaccion.setVisible(true);//Aquí limpio de una vez las ventanas sin preocupación por las posibles excepciones, esto por el hecho de que en la pseudofacturita me encargo de manejarlas, de tal manera que el cajer no lo sepa xD        
+            
+            if(!modeloLista[0].isEmpty()){
+                modeloLista[0].clear();            
+            }
+            if(!modeloLista[1].isEmpty()){
+                modeloLista[1].clear();
+            }
+        
+            rbtn_pedidos.setEnabled(true);
+            rbt_productos.setEnabled(true);
+        }//sino ni maiz xD porque no hay nada que hacer xD               
+        
+    }//GEN-LAST:event_btn_generarTransaccionActionPerformed
 
     
     public void establecerDescripcion(String descripcion){
@@ -341,6 +447,10 @@ public class ModoCajero extends javax.swing.JFrame {
         spn_Cantidad.setModel(new javax.swing.SpinnerNumberModel(1, 1,maximo, 1));
     }
     
+    /**
+     * Se encarga de decidir si se buscará pedido o producto
+     * @return
+     */
     public int determinarTipoBusqueda(){
         if(rbt_productos.isSelected()){
             return 1;
@@ -349,11 +459,12 @@ public class ModoCajero extends javax.swing.JFrame {
         return 2;//puesto que están englobados en un grupo de rBtn entonces o es 1 o es el otro xD
     }
 
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem Jmn_verReportes;
+    private javax.swing.JButton btn_generarTransaccion;
     private javax.swing.JComboBox<String> cbBx_codigosTiendasDestino;
     private javax.swing.ButtonGroup groupBtn_tipoBusqueda;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
@@ -363,8 +474,6 @@ public class ModoCajero extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel8;
-    private javax.swing.JList<String> jList1;
-    private javax.swing.JList<String> jList2;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
@@ -373,6 +482,8 @@ public class ModoCajero extends javax.swing.JFrame {
     private javax.swing.JLabel lbl_FondoIzq;
     private javax.swing.JLabel lbl_codigoTiendaActual;
     private javax.swing.JLabel lbl_home;
+    private javax.swing.JList<String> lst_pedidosARealizar;
+    private javax.swing.JList<String> lst_ventasARealizar;
     private javax.swing.JRadioButton rbt_productos;
     private javax.swing.JRadioButton rbtn_pedidos;
     private javax.swing.JScrollPane scrllP_consultas;

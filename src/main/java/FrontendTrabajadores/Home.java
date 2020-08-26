@@ -7,7 +7,10 @@ package FrontendTrabajadores;
 
 import ManejoDeInformacion.ListaEnlazada;
 import ManejoDeInformacion.ManejadorArchivo;
+import ManejoDeInformacion.ManejadorBusqueda;
 import ManejoDeInformacion.ManejadorDB;
+import ManejoDeInformacion.Nodo;
+import ManejoDeInformacion.Registro;
 import java.awt.event.KeyEvent;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
@@ -18,11 +21,12 @@ import javax.swing.filechooser.FileNameExtensionFilter;
  * @author phily
  */
 public class Home extends javax.swing.JFrame {
-    ManejadorDB manejadorDB = new ManejadorDB();
+    public static ManejadorDB manejadorDB = new ManejadorDB();
     ManejadorArchivo manejadorArchivo = new ManejadorArchivo();    
+    ManejadorBusqueda buscador = new ManejadorBusqueda();
+    Registro registrador = new Registro();
     avisoDBvacia avisoDB = new avisoDBvacia(new javax.swing.JFrame(), true);
-    listadoLineasErradas listado = new listadoLineasErradas(new javax.swing.JFrame(), true);
-    Boolean isEmpty;
+    listadoLineasErradas listado = new listadoLineasErradas(new javax.swing.JFrame(), true);    
     int camposLlenos=0;
     char[] contrasenia;
 
@@ -32,24 +36,24 @@ public class Home extends javax.swing.JFrame {
     public Home() {
         initComponents();
         manejadorDB.conectarConDB();
+        ManejadorDB.estaVacia();//recuerda que devuelve true o false si es que pudo o no realizar su acción de manera respectiva
         
-        if((isEmpty=manejadorDB.estaVacia())){
+        if(ManejadorDB.estaVacia==0){
             avisoDB.setLocationRelativeTo(null);
-            avisoDB.setVisible(true);
+            avisoDB.setVisible(true);            
             
-            if(avisoDB.devolverDecision()){
-                 abastecer();
-                
-            }
-            
-            if(manejadorDB.estaVacia()){
+            do{
+                abastecer();
+            }while(!avisoDB.devolverDecision());//no es necesario usar el método para manipular los campos luego de haber aceptado, por el hecho de que están en su estado natural xD    
+        }//sino pues no se muestra y como el botón auxiliar ya está deshabilitado...MMM al final no se empleará este btn por elwhilecito xD
+        
+            ManejadorDB.estaVacia();
+            if(ManejadorDB.estaVacia==0){
               //eso quiere decir que no se cargo bien el archivo o algo por el estilo de
               //tal manera que no pudo completarse el proceso de abastecimiento
                manipularCampos(false);
                mnItem_abastecerAuxiliar.setEnabled(true);              
-            }
-        }//sino pues no se muestra y como el botón auxiliar ya está deshabilitado...
-        
+            }                
     }
 
     /**
@@ -225,7 +229,15 @@ public class Home extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void cbBx_sucursalesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbBx_sucursalesActionPerformed
-        // TODO add your handling code here:
+        ListaEnlazada<String> listaTiendas = buscador.buscarTiendasExistentes();
+        Nodo<String> nodoAuxiliar = listaTiendas.obtnerPrimerNodo();
+        
+        for (int tiendaActual = 1; tiendaActual <= listaTiendas.darTamanio(); tiendaActual++) {
+            cbBx_sucursales.addItem(nodoAuxiliar.contenido);            
+            
+            nodoAuxiliar=nodoAuxiliar.nodoSiguiente;                        
+        }//fin del for por medio del cual se despiegan a las tiendas existentes a escoger...
+        
     }//GEN-LAST:event_cbBx_sucursalesActionPerformed
 
     private void btn_entrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_entrarActionPerformed
@@ -233,23 +245,26 @@ public class Home extends javax.swing.JFrame {
         contrasenia=passF_contraseniaTrabajador.getPassword();
         
         if(contrasenia!=null){
-            if(rbtn_modoCajero.isSelected()){
-                 ModoCajero cajero = new ModoCajero();
+            if(registrador.registroEmpleado(String.valueOf(contrasenia), txtF_nombreUsuario.getText())){
+                if(rbtn_modoCajero.isSelected()){
+                     ModoCajero cajero = new ModoCajero();
         
-                this.dispose();
+                    this.dispose();
         
-                cajero.setLocationRelativeTo(null);
-                cajero.setVisible(true);
-            }
+                    cajero.setLocationRelativeTo(null);
+                    cajero.setVisible(true);
+                }
         
-            if(rbtn_modoGerente.isSelected()){
-                ModoGerente gerente = new ModoGerente();
+                if(rbtn_modoGerente.isSelected()){
+                    ModoGerente gerente = new ModoGerente();
                 
-                this.dispose();
+                    this.dispose();
             
-                gerente.setLocationRelativeTo(null);
-                gerente.setVisible(true);
-            }                     
+                    gerente.setLocationRelativeTo(null);
+                    gerente.setVisible(true);
+                }                     
+            }//fin del if que se encarga de permitir el ingreso            
+            
         }else{
             JOptionPane.showMessageDialog(null, "Debes igresar una contraseña","" , JOptionPane.WARNING_MESSAGE);
         }                                
@@ -300,17 +315,11 @@ public class Home extends javax.swing.JFrame {
      */
     public void abastecer(){        
          
-         String path=mostrarFileChooserLectura();
+         String path=mostrarFileChooserLectura();//se podía meter de una vez en el parámtro del método que se encarga de leer el arch, pero yo quería saber si era null o no para así exe el proceso...
          
          if(path!=null){             
-             ListaEnlazada<String> lineasDelArchivo =  manejadorArchivo.leerArchivoAbastecimiento(path);//se lee el archivo completamente
-             ListaEnlazada<Integer> listaIndicesErroneos = manejadorDB.inicializarDB(lineasDelArchivo);//se intenta abastecer, si no se ha logrado en algunas partes, se devuelven esos lugares (indices del nodo)
-             if(!listaIndicesErroneos.estaVacia()){
-                ListaEnlazada<String> lineasErradas=lineasDelArchivo.obtnerContenidoListado(listaIndicesErroneos);
-                //se manda a llamar al diálogo que recibirá la lista antes de ser mostrado para que pueda visualizar el listado completo                
-                listado.recibirDatos(lineasErradas, listaIndicesErroneos);
-             }             
-             
+             manejadorArchivo.leerArchivoAbastecimiento(path);//se lee el archivo completamente y se hace el proceso completo de llenado y determinación de errores de una sola vez... xD
+     
          }else{
              JOptionPane.showMessageDialog(null, "Ningún archivo seleccionado", "", JOptionPane.WARNING_MESSAGE);
          }

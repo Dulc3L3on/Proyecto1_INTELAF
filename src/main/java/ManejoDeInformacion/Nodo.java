@@ -34,8 +34,14 @@ public class Nodo<E> {
         nodoSiguiente=siguiente;
     }
     
-    public void establecerContenido(E contenidoNuevo){
+    public void reestablecerContenido(E contenidoNuevo){
         contenido=contenidoNuevo;
+    }
+    
+    public void reestablecerNodoSiguiente(E contenido){
+        Nodo<E> nodoAuxiliar=nodoSiguiente;
+        
+        nodoSiguiente= new Nodo(contenido, nodoAuxiliar);//y aspi preservo todo lo que ese nodo antiguo sigueinte acarrea xD
     }
     
     public E obtenerObjectcEnCasilla(){//no será necesario el índice?? para hacer ref a uno específico y obtener sus respect datos??

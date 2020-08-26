@@ -5,18 +5,37 @@
  */
 package FrontendTrabajadores;
 
+import java.awt.event.KeyEvent;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author phily
  */
 public class PasoFinal extends javax.swing.JDialog {
 
+ NuevoUsuario nuevoUsuario = new NuevoUsuario();
+ DefaultTableModel modeloTablaPedidos;        
+ 
+ 
+ double[] subtotalesParejasPedidos;//recuerda que los valores que en un principio se le dieron aeste arreglo no se cambiarán, porque son la guía para no permitir un anticipo menor al 0.25
+ double subtotalPedido=0;
+ double subtotalVentas=0;
+ double totalDebido=0;
+ double totalPagado=0;
+ double total=0;//total = totalDebido-totalPagado
+ int tipoVenta=1;
+ 
     /**
      * Creates new form PasoFinal
      */
     public PasoFinal(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        
+        modeloTablaPedidos = (DefaultTableModel) tbl_detallePedidos.getModel();
+        
     }
 
     /**
@@ -33,29 +52,45 @@ public class PasoFinal extends javax.swing.JDialog {
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         txtF_NIT = new javax.swing.JTextField();
-        jTextField1 = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
-        jTextField2 = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
-        FtxtF_descuento = new javax.swing.JFormattedTextField();
         lbl_credito = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
-        lbl_subtotal = new javax.swing.JLabel();
-        spn_anticipo = new javax.swing.JSpinner();
+        lbl_subtotalAnticipos = new javax.swing.JLabel();
         lbl_total = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
+        jLabel15 = new javax.swing.JLabel();
+        lbl_direccionCliente = new javax.swing.JLabel();
+        lbl_nombreCliente = new javax.swing.JLabel();
+        spn_puntosAUsar = new javax.swing.JSpinner();
+        jLabel16 = new javax.swing.JLabel();
+        jLabel17 = new javax.swing.JLabel();
+        jLabel18 = new javax.swing.JLabel();
+        jLabel19 = new javax.swing.JLabel();
+        lbl_totalPorPedidos = new javax.swing.JLabel();
+        lbl_totalDebido = new javax.swing.JLabel();
+        jLabel22 = new javax.swing.JLabel();
+        jLabel23 = new javax.swing.JLabel();
+        lbl_subtotalVentas = new javax.swing.JLabel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        tbl_detallePedidos = new javax.swing.JTable();
+        btn_generarTransaccion = new javax.swing.JButton();
+        lbl_totalPagado = new javax.swing.JLabel();
+        jLabel14 = new javax.swing.JLabel();
+        lbl_Fondo2 = new javax.swing.JLabel();
         lbl_Fondo1 = new javax.swing.JLabel();
 
         lbl_Fondo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/fondo-blanco-abstracto-con-las-ondas-y-sombras-117841640.jpg"))); // NOI18N
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setMaximumSize(new java.awt.Dimension(514, 630));
-        setMinimumSize(new java.awt.Dimension(514, 630));
+        setMaximumSize(new java.awt.Dimension(770, 740));
+        setMinimumSize(new java.awt.Dimension(770, 740));
+        setPreferredSize(new java.awt.Dimension(770, 740));
         setResizable(false);
         getContentPane().setLayout(null);
 
@@ -65,7 +100,7 @@ public class PasoFinal extends javax.swing.JDialog {
         jLabel1.setText("DATOS del CLIENTE");
         jLabel1.setOpaque(true);
         getContentPane().add(jLabel1);
-        jLabel1.setBounds(-1, 10, 490, 40);
+        jLabel1.setBounds(-1, 10, 780, 40);
 
         jLabel2.setFont(new java.awt.Font("Sawasdee", 1, 20)); // NOI18N
         jLabel2.setText("NIT:");
@@ -75,89 +110,364 @@ public class PasoFinal extends javax.swing.JDialog {
         jLabel3.setFont(new java.awt.Font("Sawasdee", 1, 20)); // NOI18N
         jLabel3.setText("NOMBRE:");
         getContentPane().add(jLabel3);
-        jLabel3.setBounds(40, 140, 100, 35);
+        jLabel3.setBounds(40, 130, 100, 35);
+
+        txtF_NIT.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtF_NITKeyPressed(evt);
+            }
+        });
         getContentPane().add(txtF_NIT);
-        txtF_NIT.setBounds(90, 90, 210, 28);
-        getContentPane().add(jTextField1);
-        jTextField1.setBounds(140, 140, 250, 28);
+        txtF_NIT.setBounds(110, 80, 210, 28);
 
         jLabel4.setFont(new java.awt.Font("Sawasdee", 1, 20)); // NOI18N
         jLabel4.setText("DIRECCIÓN:");
         getContentPane().add(jLabel4);
-        jLabel4.setBounds(40, 200, 120, 35);
-        getContentPane().add(jTextField2);
-        jTextField2.setBounds(170, 200, 220, 28);
+        jLabel4.setBounds(40, 180, 120, 35);
 
         jLabel5.setFont(new java.awt.Font("Sawasdee", 1, 20)); // NOI18N
         jLabel5.setText("CRÉDITO:");
         getContentPane().add(jLabel5);
-        jLabel5.setBounds(260, 310, 90, 30);
+        jLabel5.setBounds(530, 80, 90, 30);
 
-        FtxtF_descuento.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#0.00"))));
-        getContentPane().add(FtxtF_descuento);
-        FtxtF_descuento.setBounds(360, 460, 110, 28);
-
+        lbl_credito.setBackground(new java.awt.Color(205, 214, 216));
         lbl_credito.setOpaque(true);
         getContentPane().add(lbl_credito);
-        lbl_credito.setBounds(360, 310, 110, 30);
+        lbl_credito.setBounds(630, 80, 110, 30);
 
         jLabel7.setFont(new java.awt.Font("Sawasdee", 1, 20)); // NOI18N
-        jLabel7.setText("Sub Total:");
+        jLabel7.setText("Total debido:");
         getContentPane().add(jLabel7);
-        jLabel7.setBounds(190, 410, 120, 35);
+        jLabel7.setBounds(460, 330, 150, 35);
 
-        jLabel8.setFont(new java.awt.Font("Sawasdee", 1, 20)); // NOI18N
-        jLabel8.setText("ANTICIPO:");
+        jLabel8.setFont(new java.awt.Font("Ubuntu", 0, 15)); // NOI18N
+        jLabel8.setText("Pago anticipos:");
         getContentPane().add(jLabel8);
-        jLabel8.setBounds(190, 370, 120, 35);
+        jLabel8.setBounds(30, 530, 130, 18);
 
-        jLabel9.setFont(new java.awt.Font("Sawasdee", 1, 20)); // NOI18N
-        jLabel9.setText("DESCUENTO:");
+        jLabel9.setFont(new java.awt.Font("Sawasdee", 1, 18)); // NOI18N
+        jLabel9.setText("-> DESCUENTOS");
         getContentPane().add(jLabel9);
-        jLabel9.setBounds(190, 460, 130, 35);
+        jLabel9.setBounds(450, 450, 160, 31);
 
         jLabel10.setFont(new java.awt.Font("Sawasdee", 1, 20)); // NOI18N
-        jLabel10.setText("TOTAL:");
+        jLabel10.setText("TOTAL Q.");
         getContentPane().add(jLabel10);
-        jLabel10.setBounds(190, 540, 120, 18);
+        jLabel10.setBounds(500, 560, 100, 18);
 
-        lbl_subtotal.setOpaque(true);
-        getContentPane().add(lbl_subtotal);
-        lbl_subtotal.setBounds(360, 410, 110, 30);
-        getContentPane().add(spn_anticipo);
-        spn_anticipo.setBounds(360, 370, 110, 28);
+        lbl_subtotalAnticipos.setText("0");
+        lbl_subtotalAnticipos.setOpaque(true);
+        getContentPane().add(lbl_subtotalAnticipos);
+        lbl_subtotalAnticipos.setBounds(270, 530, 130, 30);
 
+        lbl_total.setText("0");
         lbl_total.setOpaque(true);
         getContentPane().add(lbl_total);
-        lbl_total.setBounds(330, 530, 140, 30);
+        lbl_total.setBounds(620, 550, 120, 30);
 
         jLabel6.setText("-----------------------");
         getContentPane().add(jLabel6);
-        jLabel6.setBounds(330, 500, 140, 18);
+        jLabel6.setBounds(610, 530, 140, 18);
 
         jLabel11.setText("-----------------------");
         getContentPane().add(jLabel11);
-        jLabel11.setBounds(330, 580, 140, 18);
+        jLabel11.setBounds(610, 590, 140, 18);
 
         jLabel12.setText("-----------------------");
         getContentPane().add(jLabel12);
-        jLabel12.setBounds(330, 590, 140, 18);
+        jLabel12.setBounds(610, 600, 140, 18);
 
+        jLabel15.setText("Descuento con ptos:");
+        getContentPane().add(jLabel15);
+        jLabel15.setBounds(460, 490, 150, 30);
+
+        lbl_direccionCliente.setBackground(new java.awt.Color(205, 214, 216));
+        lbl_direccionCliente.setOpaque(true);
+        getContentPane().add(lbl_direccionCliente);
+        lbl_direccionCliente.setBounds(170, 180, 180, 30);
+
+        lbl_nombreCliente.setBackground(new java.awt.Color(205, 214, 216));
+        lbl_nombreCliente.setOpaque(true);
+        getContentPane().add(lbl_nombreCliente);
+        lbl_nombreCliente.setBounds(140, 130, 210, 30);
+
+        spn_puntosAUsar.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                spn_puntosAUsarStateChanged(evt);
+            }
+        });
+        getContentPane().add(spn_puntosAUsar);
+        spn_puntosAUsar.setBounds(620, 490, 120, 28);
+        getContentPane().add(jLabel16);
+        jLabel16.setBounds(160, 350, 110, 30);
+
+        jLabel17.setFont(new java.awt.Font("Sawasdee", 1, 20)); // NOI18N
+        jLabel17.setText("EXTRAS");
+        getContentPane().add(jLabel17);
+        jLabel17.setBounds(30, 610, 120, 40);
+
+        jLabel18.setText("Total por ventas: ");
+        getContentPane().add(jLabel18);
+        jLabel18.setBounds(30, 570, 119, 18);
+
+        jLabel19.setText("Total por pedidos:");
+        getContentPane().add(jLabel19);
+        jLabel19.setBounds(40, 290, 130, 18);
+
+        lbl_totalPorPedidos.setText("0");
+        lbl_totalPorPedidos.setOpaque(true);
+        getContentPane().add(lbl_totalPorPedidos);
+        lbl_totalPorPedidos.setBounds(280, 290, 120, 30);
+
+        lbl_totalDebido.setText("0");
+        lbl_totalDebido.setOpaque(true);
+        getContentPane().add(lbl_totalDebido);
+        lbl_totalDebido.setBounds(620, 330, 120, 30);
+
+        jLabel22.setBackground(new java.awt.Color(186, 188, 189));
+        jLabel22.setOpaque(true);
+        getContentPane().add(jLabel22);
+        jLabel22.setBounds(200, 650, 110, 30);
+
+        jLabel23.setText("Aumento de puntos");
+        getContentPane().add(jLabel23);
+        jLabel23.setBounds(40, 650, 150, 30);
+
+        lbl_subtotalVentas.setText("0");
+        lbl_subtotalVentas.setOpaque(true);
+        getContentPane().add(lbl_subtotalVentas);
+        lbl_subtotalVentas.setBounds(270, 570, 130, 30);
+
+        tbl_detallePedidos.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null}
+            },
+            new String [] {
+                "No pedido", "Pago total", "Anticipo"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Object.class, java.lang.Object.class, java.lang.Integer.class
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+        });
+        tbl_detallePedidos.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                tbl_detallePedidosMousePressed(evt);
+            }
+        });
+        jScrollPane2.setViewportView(tbl_detallePedidos);
+
+        getContentPane().add(jScrollPane2);
+        jScrollPane2.setBounds(30, 330, 370, 180);
+
+        btn_generarTransaccion.setText("ACEPTAR");
+        btn_generarTransaccion.setEnabled(false);
+        btn_generarTransaccion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_generarTransaccionActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btn_generarTransaccion);
+        btn_generarTransaccion.setBounds(630, 160, 110, 60);
+
+        lbl_totalPagado.setText("0");
+        lbl_totalPagado.setOpaque(true);
+        getContentPane().add(lbl_totalPagado);
+        lbl_totalPagado.setBounds(620, 380, 120, 30);
+
+        jLabel14.setFont(new java.awt.Font("Sawasdee", 1, 20)); // NOI18N
+        jLabel14.setText("Total pagado:");
+        getContentPane().add(jLabel14);
+        jLabel14.setBounds(460, 380, 130, 30);
+
+        lbl_Fondo2.setBackground(new java.awt.Color(205, 214, 216));
+        lbl_Fondo2.setOpaque(true);
+        getContentPane().add(lbl_Fondo2);
+        lbl_Fondo2.setBounds(10, 270, 760, 420);
+
+        lbl_Fondo1.setBackground(new java.awt.Color(76, 107, 113));
         lbl_Fondo1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/fondo-blanco-abstracto-con-las-ondas-y-sombras-117841640.jpg"))); // NOI18N
+        lbl_Fondo1.setOpaque(true);
         getContentPane().add(lbl_Fondo1);
-        lbl_Fondo1.setBounds(0, 0, 490, 630);
+        lbl_Fondo1.setBounds(0, 0, 780, 700);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void txtF_NITKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtF_NITKeyPressed
+        if(evt.getKeyCode()==KeyEvent.VK_ENTER){           
+            
+            if(establecerDatosCliente(ModoCajero.cajero.obtenerDatosCliente(txtF_NIT.getText()))){//se verifica que lo obtenido no sea null y cuando es así se setea la info en los comp visuales                 
+                if(totalPagado==0){//pues quiere decir que no se empleo el método para pedidoVendido y por ello es 0 [pues NUNCA cuando un pedido se vende tendrá valor 0!!!]
+                    subtotalesParejasPedidos = ModoCajero.cajero.darPedido().hallarTotalCadaPareja();//esto lo tienes que arreglar, porque sino va a dar null pointe cuando no tenga NADA
+                    establecerCantidadesInicialesTransaccion(ModoCajero.cajero.darVenta().totalizarVenta(), ModoCajero.cajero.darPedido().agruparDatosPedidoMostrar(subtotalesParejasPedidos, ModoCajero.cajero.darPedido().hallarAnticipoDeCadaPareja(subtotalesParejasPedidos)));//te hace falta concatenar la pareja con el precio y el anticipo que no está dificil,                              
+                }//tenías que haber empleado el arreglo de pedido que se creo con los datos del pedido general cuando se hizo la búsqueda...
+            }                                  
+        }
+    }//GEN-LAST:event_txtF_NITKeyPressed
 
+    private void btn_generarTransaccionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_generarTransaccionActionPerformed
+            //AL SER CLIKEADO SE MANDA A LLAMAR LOS MÉTODOS DE LAS TRANSACCCIONES PAR AIR ALMACENAR LOS REGISTROS A LA TABLA GENERAL Y ESPECÍFICA
+            if(subtotalVentas!=0){
+                ModoCajero.cajero.vender(tipoVenta, txtF_NIT.getText(), total);
+            }
+            if(subtotalPedido!=0){                
+                ModoCajero.cajero.solicitarPedido(txtF_NIT.getText(), subtotalesParejasPedidos, ModoCajero.cajero.darPedido().darAnticipos());//Si es que comienza desde 0...                                
+            }                                               
+    }//GEN-LAST:event_btn_generarTransaccionActionPerformed
+
+    private void tbl_detallePedidosMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbl_detallePedidosMousePressed
+        int filaSeleccionada=tbl_detallePedidos.getSelectedRow();
+        double nuevoAnticipo = (Double)modeloTablaPedidos.getValueAt(filaSeleccionada, 2);//la fila seleccionada de la tabla corresponde a una de las parejas de tiendas
+        
+        if(nuevoAnticipo<subtotalesParejasPedidos[tbl_detallePedidos.getSelectedRow()] || nuevoAnticipo>(Double)modeloTablaPedidos.getValueAt(filaSeleccionada, 1)){//pues NO DEBE ser mayor a lo que ahí esta duh! xD Y tampoco menor, por políticas de la tienda
+            modeloTablaPedidos.setValueAt(subtotalesParejasPedidos[filaSeleccionada], filaSeleccionada, 2);            
+        }else{//cambio los valores que dependen de él de manera visual...
+            hallarTotalesCambiantes();//puesto que existe dependencia...
+            ModoCajero.cajero.darPedido().actualizarAnticipoDePareja(filaSeleccionada, nuevoAnticipo);
+        }                        
+    }//GEN-LAST:event_tbl_detallePedidosMousePressed
+
+    private void spn_puntosAUsarStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_spn_puntosAUsarStateChanged
+        double nuevoTotal=Double.parseDouble(lbl_total.getText())-(Double)spn_puntosAUsar.getValue();
+        
+        lbl_total.setText(String.valueOf(nuevoTotal));//y así se reducirá el total a pagar xD
+    }//GEN-LAST:event_spn_puntosAUsarStateChanged
+
+    public boolean establecerDatosCliente(String[] informacionCliente){
+        
+        if(informacionCliente!=null){
+            establecerInfoCliente(informacionCliente);
+            return true;
+        }else{
+            int opcionSeleccionada=JOptionPane.showConfirmDialog(this, "El NIT ingresado no corresponde\na ningun cliente registrado\ndesea crear un nuevo cliente?", "",JOptionPane.INFORMATION_MESSAGE);
+            
+            if(opcionSeleccionada== JOptionPane.YES_OPTION){
+                nuevoUsuario.setLocationRelativeTo(null);
+                nuevoUsuario.establecerTituloCorrecto("NUEVO CLIENTE");
+                nuevoUsuario.recibirNITnuevoCliente(txtF_NIT.getText());
+                nuevoUsuario.setVisible(true);
+                
+                establecerInfoCliente(ModoCajero.cajero.obtenerDatosCliente(txtF_NIT.getText()));
+                return true;
+            }
+        }//fin del else donde se pregunta si desea crear a un nuevo cliente        
+        
+        return false;
+    }
+    
+    public void definirAccionTabla(String[][] datosGeneralesPedido){//estos datos los obtengo por el método de pedido donde se ordena la información
+      tbl_detallePedidos.setModel(new javax.swing.table.DefaultTableModel(
+           datosGeneralesPedido,
+            new String [] {
+                "No pedido", "Pago total", "Anticipo"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.String.class, java.lang.Double.class
+            };
+
+            boolean[] canEdit = new boolean [] {
+                false, false, true
+            };
+            
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+            
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });                      
+    }        
+    
+    public void establecerInfoCliente(String[] informacionCliente){
+        lbl_nombreCliente.setText(informacionCliente[0]);
+        lbl_direccionCliente.setText(informacionCliente[1]);
+        lbl_credito.setText(informacionCliente[2]);        
+        txtF_NIT.setEnabled(false);
+    }
+    
+    private void establecerCantidadesInicialesTransaccion(int subtotalVenta, String[][] subtotalesPedidos){//Ahí te recuerda de ver mañana si tu controlaste el hecho e que la lista estuviera vacía como para no hacer el procesto de agrupación y totalización...
+        subtotalVentas=subtotalVenta;
+        lbl_subtotalVentas.setText(String.valueOf(subtotalVenta));                
+        definirAccionTabla(subtotalesPedidos);//no le pongo restricción, porque si este arreglo no tiene nada, entonces no hará nada la tabla...                
+        hallarSubtotalesDePedido(1);
+        hallarTotalesCambiantes();
+        establecerMaximoDelSpinner();
+    }
+
+    
+    private void hallarSubtotalesDePedido(int tipoSubtotal){//1 para sumar los subtotales xD[valor que no cambiará porque es el total original de la solicitud], y 2 para el subtotal de los anticipos                                
+        for(int parejaPedido = 0; parejaPedido < modeloTablaPedidos.getRowCount(); parejaPedido++) {//sino tiene asumo que devolverá 0, así que no habrá problema...
+            subtotalPedido+=(Double)modeloTablaPedidos.getValueAt(parejaPedido, tipoSubtotal);//solo la primera vez que se use este métddo cuando existan pedidos por hacer, tendrá el valor del subrtotalPor Pedidos , después de eso tendrá e valor de los anticipos...
+        }                               
+    }
+    
+    private void hallarSubtotalGeneral(){
+        totalDebido=Double.parseDouble(lbl_subtotalVentas.getText())+Double.parseDouble(lbl_subtotalAnticipos.getText());
+        
+        lbl_totalDebido.setText(String.valueOf(totalDebido));        
+    }    
+        
+    private void hallarTotalesCambiantes(){
+        hallarSubtotalesDePedido(2);//para hallar el total de los anticipos
+        hallarSubtotalGeneral();
+        
+        total=totalDebido+subtotalPedido;//como double es un valor primitivo, entonces no sucederá alguún cambio no deseado con el valor de la etiqueta del total de los pedidos
+        lbl_total.setText(String.valueOf(total));
+    }
+    
+    public void establecerValoresPorPedidoVendido(double totalDebe, double totalHaber){
+        totalDebido=totalDebe;
+        totalPagado=totalHaber;
+        tipoVenta=2;
+        
+        lbl_totalDebido.setText(String.valueOf(totalDebido));
+        lbl_totalPagado.setText(String.valueOf(totalPagado));
+        lbl_total.setText(String.valueOf(total));        
+    }
+    
+    public void establecerMaximoDelSpinner(){
+        if((Integer.parseInt(lbl_total.getText()))>Integer.parseInt(lbl_credito.getText())){
+            spn_puntosAUsar.setModel(new javax.swing.SpinnerNumberModel(0, 0, Double.parseDouble(lbl_credito.getText()), 1));   
+        }else{
+            spn_puntosAUsar.setModel(new javax.swing.SpinnerNumberModel(0, 0, Double.parseDouble(lbl_total.getText()), 1));//pues no debería pasarse de ninguna de las cantidades mínimas :v xD
+        }
+    }
+    
+    
+    //RECUERDA QUE EL VALOR DE LOS ANTICIPOS QUE SE MANDARÁN A GUARDAR SERÁN LOS QUE ESTÁN EN LA TABLA, PORQUE ESOS SON LOS REALES
+    //Y QUE EL VALOR DE LOS PUNTOS A INCREMENTAR, SE ESTABLECERÁ, SOLO CUANDO SE VENDA UN PEDIDO, ES DECIR QUE LO OBTNEDRÁS DIRECTAMENTE DE 
+    //LA TABLA, PORQUE ASÍ ES MÁS FÁCIL...
+    
+    
+    //YA SOLO FALTA HACER EL REGISTRO LUEGO DE QUE PRESIONE ACEPTAR PUES YA ESTÁ TODO LISTO XD
+    
+    
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JFormattedTextField FtxtF_descuento;
+    private javax.swing.JButton btn_generarTransaccion;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel15;
+    private javax.swing.JLabel jLabel16;
+    private javax.swing.JLabel jLabel17;
+    private javax.swing.JLabel jLabel18;
+    private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel22;
+    private javax.swing.JLabel jLabel23;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
@@ -165,14 +475,21 @@ public class PasoFinal extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JLabel lbl_Fondo;
     private javax.swing.JLabel lbl_Fondo1;
+    private javax.swing.JLabel lbl_Fondo2;
     private javax.swing.JLabel lbl_credito;
-    private javax.swing.JLabel lbl_subtotal;
+    private javax.swing.JLabel lbl_direccionCliente;
+    private javax.swing.JLabel lbl_nombreCliente;
+    private javax.swing.JLabel lbl_subtotalAnticipos;
+    private javax.swing.JLabel lbl_subtotalVentas;
     private javax.swing.JLabel lbl_total;
-    private javax.swing.JSpinner spn_anticipo;
+    private javax.swing.JLabel lbl_totalDebido;
+    private javax.swing.JLabel lbl_totalPagado;
+    private javax.swing.JLabel lbl_totalPorPedidos;
+    private javax.swing.JSpinner spn_puntosAUsar;
+    private javax.swing.JTable tbl_detallePedidos;
     private javax.swing.JTextField txtF_NIT;
     // End of variables declaration//GEN-END:variables
 }

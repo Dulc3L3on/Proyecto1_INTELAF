@@ -14,7 +14,9 @@ import javax.swing.table.AbstractTableModel;
  *
  * @author phily
  */
-public class ResultSetTableModel extends AbstractTableModel{        
+public class ResultSetTableModel extends AbstractTableModel{       
+    
+    
 
     @Override//recuerda que estos métodos son empleados por la tabla al momento de informarle que su modelo ha cambiado, lo cual se hace en el método para mostrar la respectiva consulta xD
     public int getRowCount() {
@@ -78,6 +80,6 @@ public class ResultSetTableModel extends AbstractTableModel{
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "No se ha logrado consultar correctamente\n a la base de datos", "Error al consultar", JOptionPane.ERROR_MESSAGE);
         }                
-    }
+    }//no escribiste algo específico para manejar las excepciones, asi que si sale algo mal, deberás agregar una condi para que a la tabla no le pase nada malo al recibir null... como un "si coincidencias"
     
 }

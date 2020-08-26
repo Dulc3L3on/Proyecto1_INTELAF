@@ -6,7 +6,7 @@
 package com.mycompany.proyecto1_intelaf;    
 
 import FrontendTrabajadores.Home;
-
+        
 /**
  *
  * @author phily
@@ -20,8 +20,7 @@ public class PrincipalTrabajadores {
         Home home = new Home();        
         
         home.setLocationRelativeTo(null);
-        home.setVisible(true);
-        
-    }
-    
+        home.setVisible(true);                                   
+            
+        }                
 }
