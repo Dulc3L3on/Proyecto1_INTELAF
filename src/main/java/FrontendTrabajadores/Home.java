@@ -5,12 +5,13 @@
  */
 package FrontendTrabajadores;
 
+import BackendEntidades.Trabajador;
 import ManejoDeInformacion.ListaEnlazada;
 import ManejoDeInformacion.ManejadorArchivo;
 import ManejoDeInformacion.ManejadorBusqueda;
 import ManejoDeInformacion.ManejadorDB;
 import ManejoDeInformacion.Nodo;
-import ManejoDeInformacion.Registro;
+import ManejoDeInformacion.Validador;
 import java.awt.event.KeyEvent;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
@@ -24,7 +25,7 @@ public class Home extends javax.swing.JFrame {
     public static ManejadorDB manejadorDB = new ManejadorDB();
     ManejadorArchivo manejadorArchivo = new ManejadorArchivo();    
     ManejadorBusqueda buscador = new ManejadorBusqueda();
-    Registro registrador = new Registro();
+    Validador registrador = new Validador();
     avisoDBvacia avisoDB = new avisoDBvacia(new javax.swing.JFrame(), true);
     listadoLineasErradas listado = new listadoLineasErradas(new javax.swing.JFrame(), true);    
     int camposLlenos=0;
@@ -54,6 +55,8 @@ public class Home extends javax.swing.JFrame {
                manipularCampos(false);
                mnItem_abastecerAuxiliar.setEnabled(true);              
             }                
+            
+            rellenarCbBx();
     }
 
     /**
@@ -104,7 +107,6 @@ public class Home extends javax.swing.JFrame {
         jLabel1.setBounds(0, 30, 1000, 60);
 
         cbBx_sucursales.setFont(new java.awt.Font("Samanata", 0, 15)); // NOI18N
-        cbBx_sucursales.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         cbBx_sucursales.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cbBx_sucursalesActionPerformed(evt);
@@ -229,14 +231,7 @@ public class Home extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void cbBx_sucursalesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbBx_sucursalesActionPerformed
-        ListaEnlazada<String> listaTiendas = buscador.buscarTiendasExistentes();
-        Nodo<String> nodoAuxiliar = listaTiendas.obtnerPrimerNodo();
-        
-        for (int tiendaActual = 1; tiendaActual <= listaTiendas.darTamanio(); tiendaActual++) {
-            cbBx_sucursales.addItem(nodoAuxiliar.contenido);            
-            
-            nodoAuxiliar=nodoAuxiliar.nodoSiguiente;                        
-        }//fin del for por medio del cual se despiegan a las tiendas existentes a escoger...
+       
         
     }//GEN-LAST:event_cbBx_sucursalesActionPerformed
 
@@ -262,8 +257,11 @@ public class Home extends javax.swing.JFrame {
             
                     gerente.setLocationRelativeTo(null);
                     gerente.setVisible(true);
-                }                     
-            }//fin del if que se encarga de permitir el ingreso            
+                }               
+            //fin del if que se encarga de permitir el ingreso            
+            }else{
+                JOptionPane.showMessageDialog(null, "Nombre de usuario o contraseña\nincorrectos", "", JOptionPane.ERROR_MESSAGE);
+            }
             
         }else{
             JOptionPane.showMessageDialog(null, "Debes igresar una contraseña","" , JOptionPane.WARNING_MESSAGE);
@@ -343,6 +341,20 @@ public class Home extends javax.swing.JFrame {
         return null;//es decir que no seleccionó ningún solo archivo y por lo tanto no hay que hacer nada  
     
     }          
+     
+    public void rellenarCbBx(){
+     ListaEnlazada<String> listaTiendas = buscador.buscarTiendasExistentes();
+        Nodo<String> nodoAuxiliar = listaTiendas.obtnerPrimerNodo();
+        
+        for (int tiendaActual = 1; tiendaActual <= listaTiendas.darTamanio(); tiendaActual++) {
+            cbBx_sucursales.addItem(nodoAuxiliar.contenido);            
+            
+            nodoAuxiliar=nodoAuxiliar.nodoSiguiente;                        
+        }//fin del for por medio del cual se despiegan a las tiendas existentes a escoger...
+        
+        Trabajador.tiendaDeTrabajo=(String)cbBx_sucursales.getSelectedItem();
+    }
+     
     
     public void manipularCampos(boolean estado){
         cbBx_sucursales.setEnabled(estado);        

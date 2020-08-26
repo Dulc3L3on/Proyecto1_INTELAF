@@ -5,12 +5,26 @@
  */
 package FrontendTrabajadores;
 
+import BackendEntidades.Trabajador;
+import ManejoDeInformacion.ManejadorBusqueda;
+import ManejoDeInformacion.ManejadorEstructuras;
+import ManejoDeInformacion.Validador;
+import java.awt.event.KeyEvent;
+import javax.swing.JOptionPane;
+
+    
+
 /**
  *
  * @author phily
  */
 public class nuevoProducto extends javax.swing.JFrame {
-
+    ManejadorEstructuras estructuras = new ManejadorEstructuras();
+    ManejadorBusqueda buscador = new ManejadorBusqueda();
+    Validador validador = new Validador();
+    private boolean esNuevoRegistro=false;
+    String[] informacionIngresada = new String [7];
+    
     /**
      * Creates new form nuevoProducto
      */
@@ -34,21 +48,22 @@ public class nuevoProducto extends javax.swing.JFrame {
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jTextField2 = new javax.swing.JTextField();
-        jTextField3 = new javax.swing.JTextField();
-        jFormattedTextField1 = new javax.swing.JFormattedTextField();
-        jFormattedTextField2 = new javax.swing.JFormattedTextField();
+        txt_codigo = new javax.swing.JTextField();
+        txt_nombre = new javax.swing.JTextField();
+        txt_fabricante = new javax.swing.JTextField();
+        txt_cantidad = new javax.swing.JFormattedTextField();
+        txt_precio = new javax.swing.JFormattedTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
-        jTextField4 = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
+        txtA_descripcion = new javax.swing.JTextArea();
+        btn_agregar = new javax.swing.JButton();
+        txt_garantia = new javax.swing.JFormattedTextField();
         lbl_tituloOperacion = new javax.swing.JLabel();
         lbl_Fondo = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setMaximumSize(new java.awt.Dimension(718, 626));
-        setPreferredSize(new java.awt.Dimension(718, 626));
+        setMaximumSize(new java.awt.Dimension(618, 726));
+        setMinimumSize(new java.awt.Dimension(618, 726));
+        setPreferredSize(new java.awt.Dimension(618, 726));
         setResizable(false);
         getContentPane().setLayout(null);
 
@@ -80,42 +95,86 @@ public class nuevoProducto extends javax.swing.JFrame {
         jLabel7.setFont(new java.awt.Font("Sawasdee", 1, 17)); // NOI18N
         jLabel7.setText("GARANTÍA:");
         getContentPane().add(jLabel7);
-        jLabel7.setBounds(60, 560, 100, 30);
+        jLabel7.setBounds(70, 530, 100, 30);
 
         jLabel9.setFont(new java.awt.Font("Sawasdee", 1, 17)); // NOI18N
         jLabel9.setText("FABRICANTE:");
         getContentPane().add(jLabel9);
         jLabel9.setBounds(70, 190, 120, 30);
 
-        jTextField1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField1ActionPerformed(evt);
+        txt_codigo.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txt_codigoKeyPressed(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txt_codigoKeyTyped(evt);
             }
         });
-        getContentPane().add(jTextField1);
-        jTextField1.setBounds(170, 90, 110, 28);
-        getContentPane().add(jTextField2);
-        jTextField2.setBounds(170, 140, 160, 28);
-        getContentPane().add(jTextField3);
-        jTextField3.setBounds(190, 190, 170, 28);
-        getContentPane().add(jFormattedTextField1);
-        jFormattedTextField1.setBounds(180, 280, 120, 28);
-        getContentPane().add(jFormattedTextField2);
-        jFormattedTextField2.setBounds(150, 240, 120, 28);
+        getContentPane().add(txt_codigo);
+        txt_codigo.setBounds(170, 90, 160, 28);
 
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jScrollPane1.setViewportView(jTextArea1);
+        txt_nombre.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txt_nombreKeyTyped(evt);
+            }
+        });
+        getContentPane().add(txt_nombre);
+        txt_nombre.setBounds(170, 140, 160, 28);
+
+        txt_fabricante.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txt_fabricanteKeyTyped(evt);
+            }
+        });
+        getContentPane().add(txt_fabricante);
+        txt_fabricante.setBounds(190, 190, 170, 28);
+
+        txt_cantidad.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txt_cantidadKeyTyped(evt);
+            }
+        });
+        getContentPane().add(txt_cantidad);
+        txt_cantidad.setBounds(180, 280, 120, 28);
+
+        txt_precio.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txt_precioKeyTyped(evt);
+            }
+        });
+        getContentPane().add(txt_precio);
+        txt_precio.setBounds(150, 240, 120, 28);
+
+        txtA_descripcion.setColumns(20);
+        txtA_descripcion.setRows(5);
+        txtA_descripcion.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtA_descripcionKeyTyped(evt);
+            }
+        });
+        jScrollPane1.setViewportView(txtA_descripcion);
 
         getContentPane().add(jScrollPane1);
-        jScrollPane1.setBounds(60, 380, 510, 160);
-        getContentPane().add(jTextField4);
-        jTextField4.setBounds(160, 560, 110, 28);
+        jScrollPane1.setBounds(70, 380, 490, 120);
 
-        jButton1.setFont(new java.awt.Font("Sawasdee", 1, 17)); // NOI18N
-        jButton1.setText("AGREGAR");
-        getContentPane().add(jButton1);
-        jButton1.setBounds(450, 620, 120, 50);
+        btn_agregar.setFont(new java.awt.Font("Sawasdee", 1, 17)); // NOI18N
+        btn_agregar.setText("AGREGAR");
+        btn_agregar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_agregarActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btn_agregar);
+        btn_agregar.setBounds(450, 620, 120, 50);
+
+        txt_garantia.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("+#0"))));
+        txt_garantia.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txt_garantiaKeyTyped(evt);
+            }
+        });
+        getContentPane().add(txt_garantia);
+        txt_garantia.setBounds(180, 530, 110, 28);
 
         lbl_tituloOperacion.setFont(new java.awt.Font("Sarai", 1, 33)); // NOI18N
         lbl_tituloOperacion.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -133,21 +192,139 @@ public class nuevoProducto extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
-        //aquí es necesario revisar si el código ingresado no es igual a uno ya registrado
+    private void txt_codigoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txt_codigoKeyPressed
+        if(evt.getKeyCode()==KeyEvent.VK_ENTER){
+            String[] resultado=buscador.determinarExistenciaProducto(txt_codigo.getText());
+            if(resultado!=null){//quiere decir que encontró algo...
+                esNuevoRegistro=false;
+                txt_codigo.setEnabled(false);
+                String[] resultado2=buscador.buscarProductoEnEstaTienda(txt_codigo.getText(), Trabajador.tiendaDeTrabajo);
+                mostrarDatosRegistroAnterior(recopilarDatosAnteriores(resultado, resultado2));                             
+            }else{
+                esNuevoRegistro=true;//puesto que voy a reutilizar ventanas debo colocar estom si no no sería necesario                
+            }
         
+        }
+    }//GEN-LAST:event_txt_codigoKeyPressed
+
+    private void btn_agregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_agregarActionPerformed
+        recolectarInformacion();
         
-    }//GEN-LAST:event_jTextField1ActionPerformed
+        if(validador.aceptarRegistro(informacionIngresada, 3)){
+            if(esNuevoRegistro){
+                estructuras.insertarDatosCompletosEnProducto(informacionIngresada);
+                estructuras.insertarTiendaProducto(Trabajador.tiendaDeTrabajo, informacionIngresada[0], Integer.parseInt(informacionIngresada[6]), Double.parseDouble(informacionIngresada[5]), 0, 0);
+            }else{
+                //llamo a los updates
+                buscador.actualizarProducto(informacionIngresada);
+                buscador.actualizarTiendaProducto(informacionIngresada);
+            }            
+            
+            this.dispose();
+        }else{
+            JOptionPane.showMessageDialog(null, "Hacen falta llenar campos\nobligatorios", "", JOptionPane.INFORMATION_MESSAGE);
+        }    
+        
+        descartarRecoleccion();//independientemente de lo que suceda se debe hacer la eliminación...
+        
+    }//GEN-LAST:event_btn_agregarActionPerformed
+
+    private void txt_garantiaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txt_garantiaKeyTyped
+        if((evt.getKeyChar()<=48 || evt.getKeyChar()>=90) || txt_garantia.getText().length()>3){
+            evt.consume();
+        }
+    }//GEN-LAST:event_txt_garantiaKeyTyped
+
+    private void txt_cantidadKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txt_cantidadKeyTyped
+       if((evt.getKeyChar()<=48 || evt.getKeyChar()>=90) || txt_cantidad.getText().length()>5){
+            evt.consume();
+        }
+    }//GEN-LAST:event_txt_cantidadKeyTyped
+
+    private void txt_precioKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txt_precioKeyTyped
+       if((evt.getKeyChar()<=48 || evt.getKeyChar()>=90) || txt_precio.getText().length()>7){
+            evt.consume();
+        }
+    }//GEN-LAST:event_txt_precioKeyTyped
+
+    private void txt_fabricanteKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txt_fabricanteKeyTyped
+        if((evt.getKeyChar()>=48 && evt.getKeyChar()<=57) || txt_fabricante.getText().length()>20){
+                evt.consume();
+        }
+    }//GEN-LAST:event_txt_fabricanteKeyTyped
+
+    private void txt_nombreKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txt_nombreKeyTyped
+         if((evt.getKeyChar()>=48 && evt.getKeyChar()<=57 )|| txt_nombre.getText().length()>19){
+                evt.consume();
+        }
+    }//GEN-LAST:event_txt_nombreKeyTyped
+
+    private void txtA_descripcionKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtA_descripcionKeyTyped
+        if(txtA_descripcion.getText().length()>50){
+            evt.consume();
+        }
+    }//GEN-LAST:event_txtA_descripcionKeyTyped
+
+    private void txt_codigoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txt_codigoKeyTyped
+        if(txt_codigo.getText().length()>10){
+            evt.consume();
+        }
+    }//GEN-LAST:event_txt_codigoKeyTyped
 
     public void recibirTItulo(String tituloCOrrecto){
         lbl_tituloOperacion.setText(tituloCOrrecto);
     }
     
     
+    public void recolectarInformacion(){
+        informacionIngresada[0]=txt_codigo.getText();
+        informacionIngresada[1]=txt_nombre.getText();
+        informacionIngresada[2]=txt_fabricante.getText();
+        informacionIngresada[3]=txtA_descripcion.getText();
+        informacionIngresada[4]=txt_garantia.getText();
+        informacionIngresada[5]=txt_precio.getText();
+        informacionIngresada[6]=txt_cantidad.getText();                          
+    }
+    
+    private String[] recopilarDatosAnteriores(String resultado[], String[] resultado2){
+        String[] unificado= new String[7];
+        unificado[0]=resultado[0];
+        unificado[1]=resultado[1];
+        unificado[2]=resultado[2];
+        unificado[3]=resultado[3];
+        unificado[4]=resultado[4];
+        unificado[5]=String.valueOf(resultado2[3]);//precio
+        unificado[6]=String.valueOf(resultado2[2]);//cantidad
+        
+        return unificado;
+    }
+    
+    /**
+     * Encargado de recibir los datos anteriroes para que cuando desee hacer 
+     * la modificación tenga algo en que basarse
+     * 
+     * @param datosAnteriores
+     */
+    public void mostrarDatosRegistroAnterior(String[] datosAnteriores){
+        txt_codigo.setText(informacionIngresada[0]);
+        txt_nombre.setText(informacionIngresada[1]);
+        txt_fabricante.setText(informacionIngresada[2]);
+        txtA_descripcion.setText(informacionIngresada[3]);
+        txt_garantia.setText(informacionIngresada[4]);
+        txt_precio.setText(informacionIngresada[5]);
+        txt_cantidad.setText(informacionIngresada[6]);     
+        
+    }
+    
+    public void descartarRecoleccion(){
+        for (int espacioActual = 0; espacioActual < informacionIngresada.length; espacioActual++) {
+            informacionIngresada[espacioActual]=null;
+        }
+        
+    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JFormattedTextField jFormattedTextField1;
-    private javax.swing.JFormattedTextField jFormattedTextField2;
+    private javax.swing.JButton btn_agregar;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -156,12 +333,14 @@ public class nuevoProducto extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextArea jTextArea1;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField4;
     private javax.swing.JLabel lbl_Fondo;
     private javax.swing.JLabel lbl_tituloOperacion;
+    private javax.swing.JTextArea txtA_descripcion;
+    private javax.swing.JFormattedTextField txt_cantidad;
+    private javax.swing.JTextField txt_codigo;
+    private javax.swing.JTextField txt_fabricante;
+    private javax.swing.JFormattedTextField txt_garantia;
+    private javax.swing.JTextField txt_nombre;
+    private javax.swing.JFormattedTextField txt_precio;
     // End of variables declaration//GEN-END:variables
 }

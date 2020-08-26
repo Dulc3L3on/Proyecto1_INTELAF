@@ -41,6 +41,7 @@ public class ManejadorEstructuras {//estos métodos serán útiles para las acci
     
     }//haciendo esto se eliminan automaticamente los registros que se encuentren en cualquier otra tabla que dependa de esta y tenga ON_DELETE CASCADE xD :)
     
+    //util para la creación...
     public boolean insertarDatosCompletosEnCliente(String[] datosCliente){
         String seleccionar ="INSERT INTO Cliente VALUES (?,?,?,?,?,?,?)";        
         
@@ -64,6 +65,7 @@ public class ManejadorEstructuras {//estos métodos serán útiles para las acci
         return true;
     }
     
+        //util para la creación...
         public boolean insertarDatosCompletosEnEmpleado(String[] datosEmpleado){//creo que lo que se hubiera podido hacer es insertar el nombre de la tabla, pero ya no así que se quede...
         String seleccionar ="INSERT INTO Cliente VALUES (?,?,?,?,?,?,?)";        
         
@@ -85,6 +87,51 @@ public class ManejadorEstructuras {//estos métodos serán útiles para las acci
         }
         
         return true;
+    }
+        
+    public boolean insertarDatosCompletosEnTienda(String[] datosTienda){        
+        String insertar ="INSERT INTO Tienda VALUES (?,?,?,?,?,?,?)";        
+        
+        try(PreparedStatement instrucciones = ManejadorDB.conexion.prepareStatement(insertar)){
+            instrucciones.setString(1, datosTienda[0]);
+            instrucciones.setString(2, datosTienda[1]);
+            instrucciones.setString(3, datosTienda[2]);
+            instrucciones.setString(4, datosTienda[3]);
+            instrucciones.setString(5, datosTienda[4]);
+            instrucciones.setString(6, datosTienda[5]);                                               
+            instrucciones.setString(7, datosTienda[6]); 
+            
+            instrucciones.executeUpdate();                                                                        
+            
+        }catch(SQLException SQLex){
+            JOptionPane.showMessageDialog(null, "Ha surgido un error al intentar\nregistrar los datos del empleado", "", JOptionPane.ERROR_MESSAGE);            
+            System.out.println("\n-> "+SQLex.getMessage());            
+            return false;
+        }
+        
+        return true;               
+    }
+    
+    public boolean insertarDatosCompletosEnProducto(String[] datosProducto){
+        String insertar="INSERT INTO Producto VALUES (?,?,?,?,?)";
+        String datosTienda[] = new String[5];
+        
+        try(PreparedStatement instrucciones = ManejadorDB.conexion.prepareStatement(insertar)){
+            instrucciones.setString(1, datosTienda[0]);//codigo
+            instrucciones.setString(2, datosTienda[1]);//nombre
+            instrucciones.setString(3, datosTienda[2]);//fab
+            instrucciones.setString(4, datosTienda[3]);//desc
+            instrucciones.setString(5, datosTienda[4]);//gar  
+            
+            instrucciones.executeUpdate();                                                                        
+            
+        }catch(SQLException SQLex){
+            JOptionPane.showMessageDialog(null, "Ha surgido un error al intentar\nregistrar los datos del empleado", "", JOptionPane.ERROR_MESSAGE);            
+            System.out.println("\n-> "+SQLex.getMessage());            
+            return false;
+        }
+        
+        return true;               
     }
     
     public String[] obtnerDatosDeCLiente(String nit){
@@ -181,8 +228,8 @@ public class ManejadorEstructuras {//estos métodos serán útiles para las acci
             return true;
     }
      
-     
-    public boolean insertarTiendaProducto(String codigoTienda, String codigoProducto, int unidades, double precio, int vecesVendido, int vecesReservado){
+    /*UTIL PARA LA CREACIÓN DE UN PRODUCTO*/
+    public boolean insertarTiendaProducto(String codigoTienda, String codigoProducto, int unidades, double precio, int vecesVendido, int vecesReservado){//Debe hacerse junto con la creación del prod
         String insertar = "INSERT INTO Tienda_Producto (codigoTienda, codigoProducto, unidades, precio, vecesVendido, cantidadReservada)VALUES (?,?,?,?,?,?)";
         
        try(PreparedStatement instrucciones = ManejadorDB.conexion.prepareStatement(insertar)){
@@ -205,7 +252,14 @@ public class ManejadorEstructuras {//estos métodos serán útiles para las acci
         return true;        
     }      
      
-     public boolean insertarEnTiempo_Envio(String tienda1, String tienda2, int tiempo){
+    /**
+     * UTIL PARA CREACIÓN
+     * @param tienda1
+     * @param tienda2
+     * @param tiempo
+     * @return
+     */
+    public boolean insertarEnTiempo_Envio(String tienda1, String tienda2, int tiempo){//util para la creacion...
          String insetar = "INSERT INTO Tiempo_Envio VALUES (?,?,?)";
          
          try(PreparedStatement instrucciones = ManejadorDB.conexion.prepareStatement(insetar)){

@@ -104,6 +104,20 @@ public class ListaEnlazada<E> {
         
     }
     
+    public String[] convertirAArreglo(ListaEnlazada<String> listaAConvertir){
+        String[] arreglo = new String[tamanioLista];
+        Nodo<String>nodoAuxiliar = listaAConvertir.primerNodo; 
+        
+        for (int elementoActual = 0; elementoActual < tamanioLista; elementoActual++) {
+            arreglo[elementoActual]=nodoAuxiliar.contenido;
+            
+            nodoAuxiliar =nodoAuxiliar.nodoSiguiente;
+        }
+        
+        return arreglo;
+        
+    }
+    
     public E retornarContenidoEliminado(){
         return contenidoELiminado;
     }

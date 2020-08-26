@@ -5,7 +5,9 @@
  */
 package com.mycompany.proyecto1_intelaf;    
 
+import FrontendCliente.PantallaPrincipal;
 import FrontendTrabajadores.Home;
+import FrontendTrabajadores.Reportes;
         
 /**
  *
@@ -17,10 +19,15 @@ public class PrincipalTrabajadores {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        Home home = new Home();        
+        Home home = new Home();      
+        PantallaPrincipal pantallaPrincipal = new PantallaPrincipal();
         
         home.setLocationRelativeTo(null);
-        home.setVisible(true);                                   
+        home.setVisible(true);
+        
+        /*Reportes reportes = new Reportes();
+        reportes.setLocationRelativeTo(null);
+        reportes.setVisible(true);*/
             
         }                
 }

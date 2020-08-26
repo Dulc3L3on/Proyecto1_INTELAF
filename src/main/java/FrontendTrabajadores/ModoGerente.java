@@ -6,9 +6,6 @@
 package FrontendTrabajadores;
 
 import ManejoDeInformacion.ManejadorDB;
-import javax.swing.JFileChooser;
-import javax.swing.filechooser.FileNameExtensionFilter;
-
 /**
  *
  * @author phily
@@ -19,6 +16,7 @@ public class ModoGerente extends javax.swing.JFrame {
     nuevoProducto ventanaProductos = new nuevoProducto();
     Home home = new Home();
     ManejadorDB manejadorDB = new ManejadorDB();
+    Reportes reportes = new Reportes();
     
     /**
      * Creates new form ModoGerente
@@ -50,6 +48,7 @@ public class ModoGerente extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         btn_IR = new javax.swing.JButton();
         jLabel5 = new javax.swing.JLabel();
+        jRadioButton1 = new javax.swing.JRadioButton();
         lbl_Fondo = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
@@ -70,37 +69,40 @@ public class ModoGerente extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Sawasdee", 1, 25)); // NOI18N
         jLabel1.setText("INFORMACIÓN NUEVA");
         getContentPane().add(jLabel1);
-        jLabel1.setBounds(50, 110, 300, 30);
+        jLabel1.setBounds(50, 90, 300, 30);
 
         rbtn_nuevaTienda.setFont(new java.awt.Font("Sawasdee", 0, 19)); // NOI18N
         rbtn_nuevaTienda.setText("Tienda");
+        rbtn_nuevaTienda.setContentAreaFilled(false);
         rbtn_nuevaTienda.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 rbtn_nuevaTiendaActionPerformed(evt);
             }
         });
         getContentPane().add(rbtn_nuevaTienda);
-        rbtn_nuevaTienda.setBounds(110, 170, 120, 30);
+        rbtn_nuevaTienda.setBounds(110, 140, 120, 30);
 
         rbtn_nuevosProductos.setFont(new java.awt.Font("Sawasdee", 0, 19)); // NOI18N
         rbtn_nuevosProductos.setText("Productos");
+        rbtn_nuevosProductos.setContentAreaFilled(false);
         rbtn_nuevosProductos.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 rbtn_nuevosProductosActionPerformed(evt);
             }
         });
         getContentPane().add(rbtn_nuevosProductos);
-        rbtn_nuevosProductos.setBounds(110, 230, 130, 35);
+        rbtn_nuevosProductos.setBounds(110, 200, 130, 35);
 
         rbn_nuevosTrabajadores.setFont(new java.awt.Font("Sawasdee", 0, 19)); // NOI18N
         rbn_nuevosTrabajadores.setText("trabajadores");
+        rbn_nuevosTrabajadores.setContentAreaFilled(false);
         rbn_nuevosTrabajadores.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 rbn_nuevosTrabajadoresActionPerformed(evt);
             }
         });
         getContentPane().add(rbn_nuevosTrabajadores);
-        rbn_nuevosTrabajadores.setBounds(110, 290, 150, 30);
+        rbn_nuevosTrabajadores.setBounds(110, 260, 150, 30);
 
         chkBx_consultas.setFont(new java.awt.Font("Sawasdee", 1, 25)); // NOI18N
         chkBx_consultas.setText("CONSULTAS");
@@ -110,7 +112,7 @@ public class ModoGerente extends javax.swing.JFrame {
             }
         });
         getContentPane().add(chkBx_consultas);
-        chkBx_consultas.setBounds(50, 360, 190, 40);
+        chkBx_consultas.setBounds(60, 400, 190, 40);
 
         jLabel2.setBackground(new java.awt.Color(209, 135, 61));
         jLabel2.setOpaque(true);
@@ -145,6 +147,16 @@ public class ModoGerente extends javax.swing.JFrame {
         getContentPane().add(jLabel5);
         jLabel5.setBounds(20, 470, 100, 110);
 
+        jRadioButton1.setFont(new java.awt.Font("Sawasdee", 0, 17)); // NOI18N
+        jRadioButton1.setText("Clientes");
+        jRadioButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jRadioButton1ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jRadioButton1);
+        jRadioButton1.setBounds(110, 330, 88, 32);
+
         lbl_Fondo.setBackground(new java.awt.Color(229, 133, 49));
         lbl_Fondo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/fondo-abstracto-poligonal-amarillo_1394-1160.jpg"))); // NOI18N
         lbl_Fondo.setOpaque(true);
@@ -154,9 +166,15 @@ public class ModoGerente extends javax.swing.JFrame {
         jMenu1.setText("File");
 
         jMenuItem1.setText("Ver reportes");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem1ActionPerformed(evt);
+            }
+        });
         jMenu1.add(jMenuItem1);
 
         mnIt_abastecerDB.setText("Abastecer Base de Datos");
+        mnIt_abastecerDB.setEnabled(false);
         mnIt_abastecerDB.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 mnIt_abastecerDBMouseClicked(evt);
@@ -183,7 +201,7 @@ public class ModoGerente extends javax.swing.JFrame {
     }//GEN-LAST:event_rbtn_nuevosProductosActionPerformed
 
     private void rbn_nuevosTrabajadoresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbn_nuevosTrabajadoresActionPerformed
-        // TODO add your handling code here:
+        ventanaTrabajador.establecerTituloCorrecto("CUSTOMIZACIÓN EMPLEADO");
     }//GEN-LAST:event_rbn_nuevosTrabajadoresActionPerformed
 
     private void btn_IRActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_IRActionPerformed
@@ -231,8 +249,17 @@ public class ModoGerente extends javax.swing.JFrame {
     }//GEN-LAST:event_mnIt_abastecerDBMouseClicked
 
     private void chkBx_consultasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkBx_consultasActionPerformed
-        // TODO add your handling code here:
+        
     }//GEN-LAST:event_chkBx_consultasActionPerformed
+
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        reportes.setLocationRelativeTo(null);
+        reportes.setVisible(true);
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
+
+    private void jRadioButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton1ActionPerformed
+        ventanaTrabajador.establecerTituloCorrecto("CUSTOMIZACION CLIENTE");
+    }//GEN-LAST:event_jRadioButton1ActionPerformed
 
    
     
@@ -249,6 +276,7 @@ public class ModoGerente extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JRadioButton jRadioButton1;
     private javax.swing.JLabel lbl_Fondo;
     private javax.swing.JLabel lbl_tiendaActual;
     private javax.swing.JMenuItem mnIt_abastecerDB;

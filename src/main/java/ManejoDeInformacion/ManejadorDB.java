@@ -40,10 +40,6 @@ public class ManejadorDB {//será instanciado por primera vez en el HOME y por e
     
     String[] palabrasParaInsertar ={"INSERT INTO ", "VALUES ", "ON DUPLICATE KEY UPDATE "};
     String[] palabrasParaBorrarTuplas = {"DELETE FROM ", "WHERE "};
-    String PalabrasParaCrear[] = {"CREATE TABLE IF NOT EXIST ", "PRIMARY KEY ", "FOREIGN KEY ", "REFERENCES "};
-    
-    
-    
     
     
     public void conectarConDB(){
@@ -277,9 +273,12 @@ public class ManejadorDB {//será instanciado por primera vez en el HOME y por e
         
             ResultSet resultadosHallados= instrucciones.executeQuery(consulta);
             
-            resultadosHallados.last();//me ubico en la última fila
-            estaVacia=(resultadosHallados.getRow()-1);//obtnego el número de fila en la que me encuentro, en este caso la última xD
-            System.out.println("numero de registros en tienda-> "+ estaVacia);
+            if(resultadosHallados.next()){
+                estaVacia =resultadosHallados.getInt(1);
+            }else{
+                System.out.println("numero de registros en tienda-> "+ estaVacia);
+            }
+            
             
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Surgió un error al intentar\ndeterminar registros en inventario", "", JOptionPane.ERROR_MESSAGE);

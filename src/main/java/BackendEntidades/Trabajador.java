@@ -13,7 +13,7 @@ import ManejoDeInformacion.ManejadorEstructuras;
  * @author phily
  */
 public class Trabajador extends Usuario{
-    public String tiendaDeTrabajo;
+    public static String tiendaDeTrabajo;
     public static int lugarBusqueda;//es decir en la tienda actual, en las demás ó en todas, por medio de este valor en el listener se sabrá de donde obtnerl el código de la tienda
     
     public String palabrasParaObtenerValor[][]= new String[3][4];
@@ -28,17 +28,7 @@ public class Trabajador extends Usuario{
         palabrasParaObtenerValor[0][3]="IDproducto";//Reucerda que al final de cuentas este método solo será para obtner la cantidad del producto ya que pra obtener el numero de venta y pedido se empleará select last_insert_id()... :) XD        
     }
     
-    
-    /*
-        En este método se crear la estructura con la 
-        cual se construirá la consulta para hacer la
-        add de los datos en las tablas compuestas 
-        T_P, P_P, V_P
-    */
-//  public String[] insertarProductoEnDependientes(){
-    
-//        return //se retornará el arreglo general para inserción.. solo que aún no lo coloco porque hay que definir cuantos comando mysql podrían necesitarse para hacer cualquier inserción aquí requerida;
-//}
+
 
     /**
      * Este método me será útil para las devoluciones de los productos 

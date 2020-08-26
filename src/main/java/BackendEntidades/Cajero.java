@@ -118,13 +118,13 @@ public class Cajero extends Trabajador{//en cada una de las hijas lo que se har�
        return descripcionTransaccion;
     }      
     
-    public ListaEnlazada<String> agregarProductoPedidoVendido(long codigoPedido, double totalPorElPedido, double anticipoPagado){
+    public ListaEnlazada<String> agregarProductoPedidoVendido(int codigoPedido, double totalPorElPedido, double anticipoPagado){
         //se tiene que busacar al producto según el número de pedido general ingresado
         //se debe almacenar en una lista enlazada la cantidad y el código del producto en cuestión
         //el subtotal no es de interés por el hecho de que eso solo sería útil al menos en este punto
         //para hallar el total de la transacción, pero eso ya lo tienes en PEDIDO
         pedido.establecerDatosPedidoListo(totalPorElPedido, anticipoPagado);
-        buscador.buscarProductosListos(codigoPedido, venta.listaTransaccionUnitaria);
+        buscador.buscarProductosListos(codigoPedido, venta.listaTransaccionUnitaria);//este método es par obtner los productos de los pedidos que ya están listos para ser vendidos
         return venta.listaTransaccionUnitaria;//esto para que pueda ser usado sin cb el método para registrar venta...
     }
     

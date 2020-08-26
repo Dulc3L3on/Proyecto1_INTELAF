@@ -5,17 +5,33 @@
  */
 package FrontendTrabajadores;
 
+import ManejoDeInformacion.ListaEnlazada;
+import ManejoDeInformacion.ManejadorInformacion;
+import ManejoDeInformacion.Nodo;
+import ManejoDeInformacion.Reporte;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import javax.swing.DefaultListModel;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author phily
  */
-public class Reportes extends javax.swing.JFrame {
-
+public class Reportes extends javax.swing.JFrame {    
+    int itemSeleccionado;
+    String[] datosNecesarios=new String[2];
+    Date[] fechas = new Date[2];
+    
+    Reporte reporte = new Reporte();
+    
     /**
      * Creates new form Reportes
      */
     public Reportes() {
         initComponents();
+        
+        //se hace la query para le cbBx de las tiendas destino
     }
 
     /**
@@ -29,21 +45,20 @@ public class Reportes extends javax.swing.JFrame {
 
         cbBx_tipoReporte = new javax.swing.JComboBox<>();
         jLabel1 = new javax.swing.JLabel();
-        scrollP_tablaEspecificaciones = new javax.swing.JScrollPane();
         jScrollPane2 = new javax.swing.JScrollPane();
         Jlist_listadoGeneral = new javax.swing.JList<>();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        lst_lisaEspecifica = new javax.swing.JList<>();
         btn_exportar = new javax.swing.JButton();
-        spn_desdeDia = new javax.swing.JSpinner();
-        spn_desdeMes = new javax.swing.JSpinner();
-        spn_desdeAnio = new javax.swing.JSpinner();
-        spn_hastaDia = new javax.swing.JSpinner();
-        spn_hastaMes = new javax.swing.JSpinner();
-        spn_hastaAnio = new javax.swing.JSpinner();
+        jButton1 = new javax.swing.JButton();
+        spn_desde = new javax.swing.JSpinner();
+        spn_hasta = new javax.swing.JSpinner();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
+        txtF_especificacion = new javax.swing.JTextField();
+        cbBx_tiendasDestino = new javax.swing.JComboBox<>();
         lbl_fondo = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -53,7 +68,17 @@ public class Reportes extends javax.swing.JFrame {
         getContentPane().setLayout(null);
 
         cbBx_tipoReporte.setFont(new java.awt.Font("Sawasdee", 0, 15)); // NOI18N
-        cbBx_tipoReporte.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cbBx_tipoReporte.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Pedidos por llegar", "Pedidos en tiempo de llegar", "Pedidos atrasados", "Pedidos salidos, en tránsito", "Compras del cliente", "Pedidos en curso Cliente", "Los 10 + vendidos", "Los más vendidos por tienda", "Productos nunca vendidos" }));
+        cbBx_tipoReporte.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                cbBx_tipoReporteMouseClicked(evt);
+            }
+        });
+        cbBx_tipoReporte.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbBx_tipoReporteActionPerformed(evt);
+            }
+        });
         getContentPane().add(cbBx_tipoReporte);
         cbBx_tipoReporte.setBounds(40, 90, 280, 35);
 
@@ -62,48 +87,47 @@ public class Reportes extends javax.swing.JFrame {
         jLabel1.setText("-> TIPO DE REPORTE");
         getContentPane().add(jLabel1);
         jLabel1.setBounds(30, 20, 320, 60);
-        getContentPane().add(scrollP_tablaEspecificaciones);
-        scrollP_tablaEspecificaciones.setBounds(320, 190, 500, 590);
 
         Jlist_listadoGeneral.setFont(new java.awt.Font("Sawasdee", 0, 15)); // NOI18N
-        Jlist_listadoGeneral.setModel(new javax.swing.AbstractListModel<String>() {
+        jScrollPane2.setViewportView(Jlist_listadoGeneral);
+
+        getContentPane().add(jScrollPane2);
+        jScrollPane2.setBounds(40, 190, 470, 590);
+
+        lst_lisaEspecifica.setModel(new javax.swing.AbstractListModel<String>() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
             public int getSize() { return strings.length; }
             public String getElementAt(int i) { return strings[i]; }
         });
-        jScrollPane2.setViewportView(Jlist_listadoGeneral);
+        jScrollPane1.setViewportView(lst_lisaEspecifica);
 
-        getContentPane().add(jScrollPane2);
-        jScrollPane2.setBounds(40, 190, 280, 590);
+        getContentPane().add(jScrollPane1);
+        jScrollPane1.setBounds(510, 190, 310, 590);
 
         btn_exportar.setFont(new java.awt.Font("Sawasdee", 1, 19)); // NOI18N
         btn_exportar.setText("EXPORTAR");
         getContentPane().add(btn_exportar);
-        btn_exportar.setBounds(330, 800, 140, 50);
+        btn_exportar.setBounds(680, 790, 140, 50);
 
-        spn_desdeDia.setModel(new javax.swing.SpinnerNumberModel(1, 1, null, 1));
-        getContentPane().add(spn_desdeDia);
-        spn_desdeDia.setBounds(560, 40, 60, 28);
+        jButton1.setFont(new java.awt.Font("Sawasdee", 1, 20)); // NOI18N
+        jButton1.setText("VER");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jButton1);
+        jButton1.setBounds(520, 790, 140, 50);
 
-        spn_desdeMes.setModel(new javax.swing.SpinnerNumberModel(1, 1, 12, 1));
-        getContentPane().add(spn_desdeMes);
-        spn_desdeMes.setBounds(640, 40, 60, 28);
+        spn_desde.setModel(new javax.swing.SpinnerDateModel(new java.util.Date(), new java.util.Date(946720200000L), new java.util.Date(), java.util.Calendar.DAY_OF_MONTH));
+        spn_desde.setEnabled(false);
+        getContentPane().add(spn_desde);
+        spn_desde.setBounds(590, 40, 210, 28);
 
-        spn_desdeAnio.setModel(new javax.swing.SpinnerNumberModel(2020, 2020, 2020, 1));
-        getContentPane().add(spn_desdeAnio);
-        spn_desdeAnio.setBounds(720, 40, 80, 28);
-
-        spn_hastaDia.setModel(new javax.swing.SpinnerNumberModel(1, 1, null, 1));
-        getContentPane().add(spn_hastaDia);
-        spn_hastaDia.setBounds(560, 120, 60, 28);
-
-        spn_hastaMes.setModel(new javax.swing.SpinnerNumberModel(1, 1, 12, 1));
-        getContentPane().add(spn_hastaMes);
-        spn_hastaMes.setBounds(640, 120, 60, 28);
-
-        spn_hastaAnio.setModel(new javax.swing.SpinnerNumberModel(2020, 2020, 2020, 1));
-        getContentPane().add(spn_hastaAnio);
-        spn_hastaAnio.setBounds(720, 120, 80, 28);
+        spn_hasta.setModel(new javax.swing.SpinnerDateModel(new java.util.Date(), new java.util.Date(946719840000L), new java.util.Date(), java.util.Calendar.DAY_OF_MONTH));
+        spn_hasta.setEnabled(false);
+        getContentPane().add(spn_hasta);
+        spn_hasta.setBounds(590, 120, 210, 28);
 
         jLabel2.setFont(new java.awt.Font("Sarai", 1, 21)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(67, 53, 53));
@@ -117,11 +141,6 @@ public class Reportes extends javax.swing.JFrame {
         getContentPane().add(jLabel3);
         jLabel3.setBounds(560, 90, 70, 23);
 
-        jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/1294762.png"))); // NOI18N
-        jLabel4.setText("jLabel4");
-        getContentPane().add(jLabel4);
-        jLabel4.setBounds(700, 780, 120, 110);
-
         jLabel6.setBackground(new java.awt.Color(118, 48, 37));
         jLabel6.setOpaque(true);
         getContentPane().add(jLabel6);
@@ -131,6 +150,19 @@ public class Reportes extends javax.swing.JFrame {
         jLabel5.setOpaque(true);
         getContentPane().add(jLabel5);
         jLabel5.setBounds(819, 280, 50, 150);
+
+        txtF_especificacion.setEnabled(false);
+        txtF_especificacion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtF_especificacionActionPerformed(evt);
+            }
+        });
+        getContentPane().add(txtF_especificacion);
+        txtF_especificacion.setBounds(40, 140, 280, 28);
+
+        cbBx_tiendasDestino.setEnabled(false);
+        getContentPane().add(cbBx_tiendasDestino);
+        cbBx_tiendasDestino.setBounds(50, 800, 280, 28);
 
         lbl_fondo.setBackground(new java.awt.Color(217, 198, 179));
         lbl_fondo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/fondo-poligonal-oscuro-rojo_1034-568.jpg"))); // NOI18N
@@ -144,24 +176,81 @@ public class Reportes extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void txtF_especificacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtF_especificacionActionPerformed
+        
+    }//GEN-LAST:event_txtF_especificacionActionPerformed
+
+    private void cbBx_tipoReporteMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cbBx_tipoReporteMouseClicked
+     
+        
+        
+    }//GEN-LAST:event_cbBx_tipoReporteMouseClicked
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        //En este btn a sabiendas de lo que se requiere se procede a llamar al reporte correspondiente                
+        datosNecesarios[0]=(String)cbBx_tiendasDestino.getSelectedItem();
+        datosNecesarios[1]=txtF_especificacion.getText();        
+    
+        
+        fechas[0]=(Date)spn_desde.getValue();
+        fechas[1]=(Date)spn_hasta.getValue();        
+        
+        ListaEnlazada<String> listaReportada =reporte.reportar(itemSeleccionado, datosNecesarios, fechas);
+        
+        if(listaReportada!=null){                            
+                Nodo<String> nodoAuxiliar =listaReportada.obtnerPrimerNodo();                        
+                Jlist_listadoGeneral.setListData(listaReportada.convertirAArreglo(listaReportada));                    
+        }else{
+           JOptionPane.showMessageDialog(null,"Nada para mostrar\npruebe con otro reporte","", JOptionPane.INFORMATION_MESSAGE);
+        }        
+        
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void cbBx_tipoReporteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbBx_tipoReporteActionPerformed
+        itemSeleccionado=cbBx_tipoReporte.getSelectedIndex();        
+        String[] arregloParaLimpiar = new String[2];
+        Jlist_listadoGeneral.setListData(arregloParaLimpiar);
+         
+        switch(itemSeleccionado){             
+            case 2:
+                cbBx_tiendasDestino.setEnabled(true);//Este al igual que el cbBX de home, es cargado cuando se abre la ventana... eso quiere decir que debo crear cad vez un objeto nuevo, sino no estaría actualizado             
+            break;
+            
+            case 4 | 5:
+                txtF_especificacion.setEnabled(true);                   
+            break;
+            
+            case 6 | 7:                       
+                spn_desde.setEnabled(true);
+                spn_hasta.setEnabled(true);    
+                
+            break;        
+            
+            default:
+                txtF_especificacion.setEnabled(false);
+                spn_desde.setEnabled(false);
+                spn_hasta.setEnabled(false);                                
+            break;
+        }
+    }//GEN-LAST:event_cbBx_tipoReporteActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JList<String> Jlist_listadoGeneral;
     private javax.swing.JButton btn_exportar;
+    private javax.swing.JComboBox<String> cbBx_tiendasDestino;
     private javax.swing.JComboBox<String> cbBx_tipoReporte;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JLabel lbl_fondo;
-    private javax.swing.JScrollPane scrollP_tablaEspecificaciones;
-    private javax.swing.JSpinner spn_desdeAnio;
-    private javax.swing.JSpinner spn_desdeDia;
-    private javax.swing.JSpinner spn_desdeMes;
-    private javax.swing.JSpinner spn_hastaAnio;
-    private javax.swing.JSpinner spn_hastaDia;
-    private javax.swing.JSpinner spn_hastaMes;
+    private javax.swing.JList<String> lst_lisaEspecifica;
+    private javax.swing.JSpinner spn_desde;
+    private javax.swing.JSpinner spn_hasta;
+    private javax.swing.JTextField txtF_especificacion;
     // End of variables declaration//GEN-END:variables
 }

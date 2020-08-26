@@ -27,57 +27,144 @@ public class NuevaTienda extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
+        jLabel8 = new javax.swing.JLabel();
+        jLabel10 = new javax.swing.JLabel();
+        jLabel11 = new javax.swing.JLabel();
+        jTextField1 = new javax.swing.JTextField();
+        jTextField2 = new javax.swing.JTextField();
+        jTextField3 = new javax.swing.JTextField();
+        jTextField4 = new javax.swing.JTextField();
+        jTextField5 = new javax.swing.JTextField();
+        jTextField6 = new javax.swing.JTextField();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTextArea1 = new javax.swing.JTextArea();
+        lbl_Fondo = new javax.swing.JLabel();
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 673, Short.MAX_VALUE)
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 678, Short.MAX_VALUE)
-        );
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        getContentPane().setLayout(null);
+
+        jLabel2.setBackground(new java.awt.Color(145, 129, 113));
+        jLabel2.setFont(new java.awt.Font("Sawasdee", 1, 25)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(214, 205, 205));
+        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel2.setText("<<CUSTOMIZACIÓN TIENDA>>");
+        jLabel2.setOpaque(true);
+        getContentPane().add(jLabel2);
+        jLabel2.setBounds(0, 20, 620, 40);
+
+        jLabel3.setFont(new java.awt.Font("Sawasdee", 1, 19)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(226, 205, 205));
+        jLabel3.setText("Nombre:");
+        getContentPane().add(jLabel3);
+        jLabel3.setBounds(50, 160, 90, 30);
+
+        jLabel4.setFont(new java.awt.Font("Sawasdee", 1, 19)); // NOI18N
+        jLabel4.setForeground(new java.awt.Color(227, 204, 204));
+        jLabel4.setText("Código:");
+        getContentPane().add(jLabel4);
+        jLabel4.setBounds(50, 100, 80, 40);
+
+        jLabel6.setFont(new java.awt.Font("Sawasdee", 1, 19)); // NOI18N
+        jLabel6.setForeground(new java.awt.Color(208, 194, 194));
+        jLabel6.setText("Dirección:");
+        getContentPane().add(jLabel6);
+        jLabel6.setBounds(50, 200, 110, 50);
+
+        jLabel7.setFont(new java.awt.Font("Sawasdee", 1, 19)); // NOI18N
+        jLabel7.setForeground(new java.awt.Color(227, 216, 216));
+        jLabel7.setText("Teléfono 1:");
+        getContentPane().add(jLabel7);
+        jLabel7.setBounds(50, 260, 130, 30);
+
+        jButton1.setText("jButton1");
+        getContentPane().add(jButton1);
+        jButton1.setBounds(460, 390, 130, 60);
+
+        jLabel8.setFont(new java.awt.Font("Sawasdee", 1, 19)); // NOI18N
+        jLabel8.setForeground(new java.awt.Color(230, 204, 204));
+        jLabel8.setText("Horario:");
+        getContentPane().add(jLabel8);
+        jLabel8.setBounds(50, 360, 90, 30);
+
+        jLabel10.setFont(new java.awt.Font("Sawasdee", 1, 19)); // NOI18N
+        jLabel10.setForeground(new java.awt.Color(237, 227, 227));
+        jLabel10.setText("Teléfono 2:");
+        getContentPane().add(jLabel10);
+        jLabel10.setBounds(330, 250, 97, 40);
+
+        jLabel11.setFont(new java.awt.Font("Sawasdee", 1, 19)); // NOI18N
+        jLabel11.setForeground(new java.awt.Color(229, 214, 214));
+        jLabel11.setText("Correo:");
+        getContentPane().add(jLabel11);
+        jLabel11.setBounds(50, 310, 80, 30);
+
+        jTextField1.setText("jTextField1");
+        getContentPane().add(jTextField1);
+        jTextField1.setBounds(150, 110, 220, 28);
+
+        jTextField2.setText("jTextField2");
+        getContentPane().add(jTextField2);
+        jTextField2.setBounds(150, 160, 230, 28);
+
+        jTextField3.setText("jTextField3");
+        getContentPane().add(jTextField3);
+        jTextField3.setBounds(150, 210, 200, 28);
+
+        jTextField4.setText("jTextField4");
+        getContentPane().add(jTextField4);
+        jTextField4.setBounds(170, 260, 140, 28);
+
+        jTextField5.setText("jTextField5");
+        getContentPane().add(jTextField5);
+        jTextField5.setBounds(440, 260, 150, 28);
+
+        jTextField6.setText("jTextField6");
+        getContentPane().add(jTextField6);
+        jTextField6.setBounds(140, 310, 220, 28);
+
+        jTextArea1.setColumns(20);
+        jTextArea1.setRows(5);
+        jScrollPane1.setViewportView(jTextArea1);
+
+        getContentPane().add(jScrollPane1);
+        jScrollPane1.setBounds(140, 370, 262, 92);
+
+        lbl_Fondo.setBackground(new java.awt.Color(136, 144, 146));
+        lbl_Fondo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/fondo-pastel-color-abstracto-cielo-suave-fondo-nubes-color-pastel_6529-309.jpg"))); // NOI18N
+        lbl_Fondo.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
+        lbl_Fondo.setOpaque(true);
+        getContentPane().add(lbl_Fondo);
+        lbl_Fondo.setBounds(0, 0, 630, 650);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(NuevaTienda.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(NuevaTienda.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(NuevaTienda.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(NuevaTienda.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new NuevaTienda().setVisible(true);
-            }
-        });
-    }
+   
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButton1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTextArea jTextArea1;
+    private javax.swing.JTextField jTextField1;
+    private javax.swing.JTextField jTextField2;
+    private javax.swing.JTextField jTextField3;
+    private javax.swing.JTextField jTextField4;
+    private javax.swing.JTextField jTextField5;
+    private javax.swing.JTextField jTextField6;
+    private javax.swing.JLabel lbl_Fondo;
     // End of variables declaration//GEN-END:variables
 }

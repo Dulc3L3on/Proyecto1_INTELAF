@@ -8,11 +8,13 @@
 /home/phily/Documentos/Carpeta_estudios/CuartoSemestre/IPC2/LabIPC2/Proyectos/Proyecto1/Proyecto1_Intelaf/src/main/java/ManejoDeInformacion/ManejadorInformacion.java
 /home/phily/Documentos/Carpeta_estudios/CuartoSemestre/IPC2/LabIPC2/Proyectos/Proyecto1/Proyecto1_Intelaf/src/main/java/ManejoDeInformacion/ManejoDeErrores.java
 /home/phily/Documentos/Carpeta_estudios/CuartoSemestre/IPC2/LabIPC2/Proyectos/Proyecto1/Proyecto1_Intelaf/src/main/java/ManejoDeInformacion/ManejadorBusqueda.java
+/home/phily/Documentos/Carpeta_estudios/CuartoSemestre/IPC2/LabIPC2/Proyectos/Proyecto1/Proyecto1_Intelaf/src/main/java/FrontendCliente/PantallaPrincipal.java
 /home/phily/Documentos/Carpeta_estudios/CuartoSemestre/IPC2/LabIPC2/Proyectos/Proyecto1/Proyecto1_Intelaf/src/main/java/FrontendTrabajadores/NuevoUsuario.java
 /home/phily/Documentos/Carpeta_estudios/CuartoSemestre/IPC2/LabIPC2/Proyectos/Proyecto1/Proyecto1_Intelaf/src/main/java/BackendTransacciones/Transaccion.java
 /home/phily/Documentos/Carpeta_estudios/CuartoSemestre/IPC2/LabIPC2/Proyectos/Proyecto1/Proyecto1_Intelaf/src/main/java/FrontendTrabajadores/ResultSetTableModel.java
 /home/phily/Documentos/Carpeta_estudios/CuartoSemestre/IPC2/LabIPC2/Proyectos/Proyecto1/Proyecto1_Intelaf/src/main/java/FrontendTrabajadores/avisoDBvacia.java
 /home/phily/Documentos/Carpeta_estudios/CuartoSemestre/IPC2/LabIPC2/Proyectos/Proyecto1/Proyecto1_Intelaf/src/main/java/FrontendTrabajadores/Reportes.java
+/home/phily/Documentos/Carpeta_estudios/CuartoSemestre/IPC2/LabIPC2/Proyectos/Proyecto1/Proyecto1_Intelaf/src/main/java/ManejoDeInformacion/Reporte.java
 /home/phily/Documentos/Carpeta_estudios/CuartoSemestre/IPC2/LabIPC2/Proyectos/Proyecto1/Proyecto1_Intelaf/src/main/java/BackendEntidades/Trabajador.java
 /home/phily/Documentos/Carpeta_estudios/CuartoSemestre/IPC2/LabIPC2/Proyectos/Proyecto1/Proyecto1_Intelaf/src/main/java/BackendTransacciones/Pedido.java
 /home/phily/Documentos/Carpeta_estudios/CuartoSemestre/IPC2/LabIPC2/Proyectos/Proyecto1/Proyecto1_Intelaf/src/main/java/BackendEntidades/Cliente.java
@@ -25,9 +27,10 @@
 /home/phily/Documentos/Carpeta_estudios/CuartoSemestre/IPC2/LabIPC2/Proyectos/Proyecto1/Proyecto1_Intelaf/src/main/java/FrontendTrabajadores/ModoGerente.java
 /home/phily/Documentos/Carpeta_estudios/CuartoSemestre/IPC2/LabIPC2/Proyectos/Proyecto1/Proyecto1_Intelaf/src/main/java/ManejoDeInformacion/Nodo.java
 /home/phily/Documentos/Carpeta_estudios/CuartoSemestre/IPC2/LabIPC2/Proyectos/Proyecto1/Proyecto1_Intelaf/src/main/java/ManejoDeInformacion/ManejadorArchivo.java
+/home/phily/Documentos/Carpeta_estudios/CuartoSemestre/IPC2/LabIPC2/Proyectos/Proyecto1/Proyecto1_Intelaf/src/main/java/FrontendCliente/IngresoPedido.java
 /home/phily/Documentos/Carpeta_estudios/CuartoSemestre/IPC2/LabIPC2/Proyectos/Proyecto1/Proyecto1_Intelaf/src/main/java/FrontendTrabajadores/tablaPrototipo.java
 /home/phily/Documentos/Carpeta_estudios/CuartoSemestre/IPC2/LabIPC2/Proyectos/Proyecto1/Proyecto1_Intelaf/src/main/java/com/mycompany/proyecto1_intelaf/PrincipalTrabajadores.java
-/home/phily/Documentos/Carpeta_estudios/CuartoSemestre/IPC2/LabIPC2/Proyectos/Proyecto1/Proyecto1_Intelaf/src/main/java/ManejoDeInformacion/Registro.java
+/home/phily/Documentos/Carpeta_estudios/CuartoSemestre/IPC2/LabIPC2/Proyectos/Proyecto1/Proyecto1_Intelaf/src/main/java/ManejoDeInformacion/Validador.java
 /home/phily/Documentos/Carpeta_estudios/CuartoSemestre/IPC2/LabIPC2/Proyectos/Proyecto1/Proyecto1_Intelaf/src/main/java/FrontendTrabajadores/modificadorCantidadAdquirida.java
 /home/phily/Documentos/Carpeta_estudios/CuartoSemestre/IPC2/LabIPC2/Proyectos/Proyecto1/Proyecto1_Intelaf/src/main/java/FrontendTrabajadores/Home.java
 /home/phily/Documentos/Carpeta_estudios/CuartoSemestre/IPC2/LabIPC2/Proyectos/Proyecto1/Proyecto1_Intelaf/src/main/java/FrontendTrabajadores/MouseClickedEnTablasConsulta.java

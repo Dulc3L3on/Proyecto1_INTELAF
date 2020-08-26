@@ -371,7 +371,7 @@ public class ModoCajero extends javax.swing.JFrame {
                 }            
             }     
         }else{//vender un pedido...
-            modeloLista[0].addAll((Collection) cajero.agregarProductoPedidoVendido(Long.parseLong(txtF_codigo.getText()), (double)modeloConsulta.getValueAt(tbl_tablaConsultas.getSelectedRow(), 5), (double)modeloConsulta.getValueAt(tbl_tablaConsultas.getSelectedRow(), 6)));//si no llegara a funcionar, lo que debes hacer es ir leyendo los nodos de la lista para irlos agregando 1 a 1, lo normal xD                                    
+            modeloLista[0].addAll((Collection) cajero.agregarProductoPedidoVendido(Integer.parseInt(txtF_codigo.getText()), (double)modeloConsulta.getValueAt(tbl_tablaConsultas.getSelectedRow(), 5), (double)modeloConsulta.getValueAt(tbl_tablaConsultas.getSelectedRow(), 6)));//si no llegara a funcionar, lo que debes hacer es ir leyendo los nodos de la lista para irlos agregando 1 a 1, lo normal xD                                    
         }//Ya se agregan los productos listos para ser vendidos a la lista y a JList :3       
         
         if(!modeloLista[0].isEmpty() || !modeloLista[1].isEmpty()){

@@ -8,6 +8,8 @@ package FrontendTrabajadores;
 
 import BackendEntidades.Cajero;
 import BackendEntidades.Gerente;
+import ManejoDeInformacion.ManejadorBusqueda;
+import ManejoDeInformacion.ManejadorEstructuras;
 import javax.swing.JOptionPane;
 
 /**
@@ -17,6 +19,10 @@ import javax.swing.JOptionPane;
 public class NuevoUsuario extends javax.swing.JFrame {//solo se encarga de crear o modificar al usuario, es decir su función principal es dar un espacio para ingresar información que mandará a la DB y solo xD, si quieres obtner info de aquí, vuelve a exe otra consulta, solo que esta vez para seleccionar, en lugar de insertar...
     String[] datosUsuario= new String[7];//Se envían alamacenan los datos a registrar ya sea de cliente o trabajador, app tanto para modifs como para creaciones, lo dejo de tam 7, porque de esa manera 
     //no tendré que hacer extras con el crédito, porque cuando sea cliente el espacio que le corresponde al crédito será NULL y por ello allá en la tabla se establecerá como default 0 xD, sino sucediera así entonce solo le seteas 0 y ya :v xD JAJAJAJ además recuerda que se almacenará como string para no estarse preocupando por las conversiones...
+    int tipoDialogo=0;//1-> empleado, 2-> cliente y los demás quedan en una de estas 2 categarías dependiendo de su palabra final...
+    boolean esRegistroNuevo;
+    ManejadorEstructuras estructuras = new ManejadorEstructuras();
+    ManejadorBusqueda buscador = new ManejadorBusqueda();
     Cajero cajero = new Cajero();
     Gerente gerente = new Gerente();    
     
@@ -99,12 +105,36 @@ public class NuevoUsuario extends javax.swing.JFrame {//solo se encarga de crear
         jLabel7.setText("DIRECCIÓN:");
         getContentPane().add(jLabel7);
         jLabel7.setBounds(80, 300, 140, 35);
+
+        txtF_Nombre.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtF_NombreKeyTyped(evt);
+            }
+        });
         getContentPane().add(txtF_Nombre);
         txtF_Nombre.setBounds(190, 140, 190, 28);
+
+        txtF_DPI.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtF_DPIKeyTyped(evt);
+            }
+        });
         getContentPane().add(txtF_DPI);
         txtF_DPI.setBounds(190, 220, 150, 28);
+
+        txtF_Telefono.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtF_TelefonoKeyTyped(evt);
+            }
+        });
         getContentPane().add(txtF_Telefono);
         txtF_Telefono.setBounds(190, 180, 130, 28);
+
+        FtxtF_Correo.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                FtxtF_CorreoKeyTyped(evt);
+            }
+        });
         getContentPane().add(FtxtF_Correo);
         FtxtF_Correo.setBounds(190, 260, 190, 28);
         getContentPane().add(txtF_Direccion);
@@ -124,12 +154,21 @@ public class NuevoUsuario extends javax.swing.JFrame {//solo se encarga de crear
         lbl_nitTrabajador.setText("NIT:");
         getContentPane().add(lbl_nitTrabajador);
         lbl_nitTrabajador.setBounds(80, 340, 40, 30);
+
+        txtF_nitParaTrabajador.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtF_nitParaTrabajadorKeyTyped(evt);
+            }
+        });
         getContentPane().add(txtF_nitParaTrabajador);
         txtF_nitParaTrabajador.setBounds(140, 340, 170, 28);
 
         txt_codigoUsuario.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 txt_codigoUsuarioKeyPressed(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txt_codigoUsuarioKeyTyped(evt);
             }
         });
         getContentPane().add(txt_codigoUsuario);
@@ -143,7 +182,20 @@ public class NuevoUsuario extends javax.swing.JFrame {//solo se encarga de crear
     }// </editor-fold>//GEN-END:initComponents
 
     private void txt_codigoUsuarioKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txt_codigoUsuarioKeyPressed
-            //Esto es solo para gerente porque hay que revisar que el código que ingrese no sea repetido...
+         String[] datosAnteriores;
+        
+         if(lbl_tituloOperacion.getText().endsWith("CLIENTE")){
+             datosAnteriores=buscador.determinarExistenciaCliente(txt_codigoUsuario.getText());
+         }else{//ya que no hay más opciones, de una vez un else...
+             datosAnteriores=buscador.determinarExistenciaEmpleado(txt_codigoUsuario.getText());
+         }
+         
+         if(datosAnteriores!=null){             
+             //abastezco los campos con la info recibida...
+             esRegistroNuevo=false;
+         }else{
+             esRegistroNuevo=true;
+         }
     }//GEN-LAST:event_txt_codigoUsuarioKeyPressed
 
     private void btn_agregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_agregarActionPerformed
@@ -152,12 +204,59 @@ public class NuevoUsuario extends javax.swing.JFrame {//solo se encarga de crear
             //de tal manera que en el paso siguente de la pseudoFactura, puedan obtenerse
             obtnerInfoIngresada();//se guardaron los datos en el arreglo
             
+            if(esRegistroNuevo){                
+                registrarUsuario();//aqupi ya se escoge a cual de los 2...                
+            }else{
+                actualizarUsuario();
+            }                        
             
-            this.dispose();
+            this.dispose();//lo de los booleans iba a afectar justamente a esta linea, de tal manera que si fallaba no se cerrara y aún quedara espacio para componer o intentarlo otra vez
         }else{
             JOptionPane.showMessageDialog(null, "Hacen falta llenar campos obligatorios", "", JOptionPane.WARNING_MESSAGE);
         }
     }//GEN-LAST:event_btn_agregarActionPerformed
+
+    private void txt_codigoUsuarioKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txt_codigoUsuarioKeyTyped
+        if(tipoDialogo==1){//quiere decir que es cliente
+            if(txt_codigoUsuario.getText().length()>6){//aunque esto debe cambiar por el hecho de que los nits son de  masyoers cantidades... por ello cuando la borres deberás eliminar a las que de ella dependend, por las condiciones...
+                evt.consume();            
+            }
+        }else{//ya que solo hay 2 ops generales...
+            if((evt.getKeyChar()<=48 || evt.getKeyChar()>=90) || txt_codigoUsuario.getText().length()>7){
+                evt.consume();
+            }
+            
+        }
+        
+    }//GEN-LAST:event_txt_codigoUsuarioKeyTyped
+
+    private void txtF_NombreKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtF_NombreKeyTyped
+        if((evt.getKeyChar()>=48 && evt.getKeyChar()<=57 )|| txtF_Nombre.getText().length()>15){
+                evt.consume();
+        }
+    }//GEN-LAST:event_txtF_NombreKeyTyped
+
+    private void txtF_TelefonoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtF_TelefonoKeyTyped
+        if((evt.getKeyChar()<=48 || evt.getKeyChar()>=90) || txt_codigoUsuario.getText().length()>8){
+                evt.consume();
+         }
+    }//GEN-LAST:event_txtF_TelefonoKeyTyped
+
+    private void txtF_DPIKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtF_DPIKeyTyped
+        if((evt.getKeyChar()<=48 || evt.getKeyChar()>=90) || txt_codigoUsuario.getText().length()>13){
+                evt.consume();
+        }
+    }//GEN-LAST:event_txtF_DPIKeyTyped
+
+    private void FtxtF_CorreoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_FtxtF_CorreoKeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_FtxtF_CorreoKeyTyped
+
+    private void txtF_nitParaTrabajadorKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtF_nitParaTrabajadorKeyTyped
+        if(txt_codigoUsuario.getText().length()>6){//aunque esto debe cambiar por el hecho de que los nits son de  masyoers cantidades... por ello cuando la borres deberás eliminar a las que de ella dependend, por las condiciones...
+                evt.consume();            
+        }
+    }//GEN-LAST:event_txtF_nitParaTrabajadorKeyTyped
 
     public void establecerTituloCorrecto(String tituloOperacion){
         lbl_tituloOperacion.setText(tituloOperacion);                
@@ -180,11 +279,13 @@ public class NuevoUsuario extends javax.swing.JFrame {//solo se encarga de crear
             txt_codigoUsuario.setEditable(false);
             lbl_nitTrabajador.setVisible(false);
             txtF_nitParaTrabajador.setVisible(false);
+            tipoDialogo=1;
             
         }else{
             txt_codigoUsuario.setEditable(true);
             lbl_nitTrabajador.setVisible(true);        
             txtF_nitParaTrabajador.setVisible(true);
+            tipoDialogo=2;
         }
     }
     
@@ -241,6 +342,16 @@ public class NuevoUsuario extends javax.swing.JFrame {//solo se encarga de crear
         }
     
     }
+    
+    public void actualizarUsuario(){
+        if(lbl_tituloOperacion.getText().endsWith("CLIENTE")){
+            
+        }else{
+           buscador.actualizarEmpleado(datosUsuario);
+        }
+    }
+    
+    
     
     
     //NO OLVIDES QUE ESTE MÉTODO SOLO SE ENCARGA DE REGISTRAR AL CLIENTE NO DE MANDAR 
